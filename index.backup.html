@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meeting AI — Real-Time AI Meeting Assistant for Busy Professionals</title>
+  <meta name="description" content="Meeting AI listens to your meetings in real time, spots risks and alignment gaps, and tells you what to say — so you always sound prepared.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Meeting AI — Real-Time AI Meeting Assistant">
+  <meta property="og:description" content="Never blank out in a meeting again. Meeting AI proactively reasons with you and tells you what to say.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://meetingai.com">
+  <meta property="og:image" content="https://placehold.co/1200x630/181925/ffffff?text=Meeting+AI">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Meeting AI — Real-Time AI Meeting Assistant">
+  <meta name="twitter:description" content="Never blank out in a meeting again. Meeting AI proactively reasons with you and tells you what to say.">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://meetingai.com">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM TOKENS
+       All colour, spacing, and typography values live here.
+       Never hard-code values outside this block.
+    ============================================================ */
+    :root {
+      /* Typography */
+      --default-font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+      --font-mono: "SF Mono", Menlo, monospace;
+
+      --text-xs:   .75rem;
+      --text-sm:   .875rem;
+      --text-base: 1rem;
+      --text-lg:   1.125rem;
+      --text-xl:   1.25rem;
+      --text-2xl:  1.5rem;
+      --text-3xl:  1.875rem;
+      --text-4xl:  2.25rem;
+      --text-5xl:  3rem;
+      --text-6xl:  3.75rem;
+
+      --text-xs--lh:   calc(1 / .75);
+      --text-sm--lh:   calc(1.25 / .875);
+      --text-base--lh: 1.5;
+      --text-lg--lh:   calc(1.75 / 1.125);
+      --text-xl--lh:   calc(1.75 / 1.25);
+      --text-2xl--lh:  calc(2 / 1.5);
+      --text-3xl--lh:  1.2;
+      --text-4xl--lh:  calc(2.5 / 2.25);
+      --text-5xl--lh:  1;
+
+      --font-weight-normal:    400;
+      --font-weight-medium:    500;
+      --font-weight-semibold:  600;
+      --font-weight-extrabold: 800;
+
+      --tracking-tighter: -.05em;
+      --tracking-normal:   0em;
+      --tracking-widest:   .1em;
+
+      --leading-snug:    1.375;
+      --leading-relaxed: 1.625;
+
+      /* Radii */
+      --radius-1: .125rem;
+      --radius-2: .25rem;
+      --radius-3: .375rem;
+      --radius-4: .5rem;
+      --radius-5: .75rem;
+      --radius-6: 1rem;
+      --radius-2xl: 1rem;
+      --radius-3xl: 1.5rem;
+      --radius-4xl: 2rem;
+
+      /* Shadows */
+      --shadow-1: 0px 1px 1px #00000014, 0px 0px 0px 1px #0000000d;
+      --shadow-2: 0px 1px 3px #00000014, 0px 0px 0px 1px #00000005;
+      --shadow-3: 0px 1px 3px #0000000f, 0px 8px 16px #0000000f, 0px 0px 0px 1px #00000005;
+      --shadow-4: 0px 3px 12px #0000000f, 0px 4px 16px #0000000f, 0px 0px 0px 1px #00000008;
+
+      /* Transitions */
+      --ease-out:    cubic-bezier(0, 0, .2, 1);
+      --ease-in-out: cubic-bezier(.4, 0, .2, 1);
+      --dur:         .15s;
+
+      /* Blur */
+      --blur-md: 12px;
+      --blur-xl: 24px;
+
+      /* Backgrounds */
+      --background:        #fff;
+      --background-subtle: #fafafa;
+      --bg-1: #fff;
+      --bg-2: #f5f5f5;
+      --bg-3: #f0f0f0;
+      --bg-4: #e8e8e8;
+
+      /* Foregrounds */
+      --fg-1: #b3b3b3;
+      --fg-2: #999;
+      --fg-3: #666;
+      --fg-4: #181925;
+
+      /* Alpha surfaces */
+      --bg-a1: #00000008;
+      --bg-a2: #0000000d;
+      --bg-a3: #00000014;
+      --bg-a4: #0000001f;
+
+      /* Grays */
+      --gray-1: #f7f7f7;
+      --gray-2: #e0e0e0;
+      --gray-3: #ccc;
+      --gray-4: #b3b3b3;
+
+      /* Blues */
+      --blue-1: #f0fbff;
+      --blue-4: #00c4ff;
+
+      /* Reds */
+      --red-1:  #fff3f0;
+      --red-4:  #ff2f00;
+
+      /* Greens */
+      --green-1: #effbf2;
+      --green-4: #33c758;
+
+      /* Ambers */
+      --amber-1: #fff8eb;
+      --amber-2: #ffeac2;
+      --amber-4: #ffa600;
+
+      /* Purples */
+      --purple-1: #f1f1fe;
+      --purple-2: #dad9fc;
+      --purple-3: #b5b3f9;
+      --purple-4: #918df6;
+
+      /* Sky */
+      --sky-1: #ebf2ff;
+      --sky-2: #bed5fe;
+      --sky-3: #689ffd;
+      --sky-4: #2c78fc;
+
+      /* Orange */
+      --orange-4: #f76808;
+
+      /* Aliases */
+      --color-background: var(--background);
+      --color-red-4:    var(--red-4);
+      --color-green-4:  var(--green-4);
+      --color-amber-2:  var(--amber-2);
+      --color-amber-4:  var(--amber-4);
+      --color-purple-4: var(--purple-4);
+      --color-sky-4:    var(--sky-4);
+    }
+
+    /* ============================================================
+       RESET + BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--default-font-family);
+      font-size: var(--text-base);
+      line-height: var(--text-base--lh);
+      color: var(--fg-3);
+      background: var(--bg-1);
+      -webkit-font-smoothing: antialiased;
+      letter-spacing: -.02em;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5, h6 { margin: 0; color: var(--fg-4); }
+    p  { margin: 0; }
+    a  { color: inherit; text-decoration: none; }
+    ul { list-style: none; margin: 0; padding: 0; }
+    img { display: block; max-width: 100%; }
+
+    /* ============================================================
+       LAYOUT HELPERS
+    ============================================================ */
+    .container {
+      max-width: 64rem; /* --container-5xl */
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    section { padding: 5rem 0; }
+
+    .section-label {
+      font-size: var(--text-xs);
+      font-weight: var(--font-weight-semibold);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-widest);
+      color: var(--fg-2);
+      margin-bottom: .75rem;
+    }
+
+    .section-title {
+      font-size: var(--text-4xl);
+      font-weight: var(--font-weight-extrabold);
+      color: var(--fg-4);
+      letter-spacing: -.03em;
+      line-height: 1.1;
+      margin-bottom: .75rem;
+    }
+
+    .section-sub {
+      font-size: var(--text-lg);
+      color: var(--fg-3);
+      line-height: var(--leading-relaxed);
+    }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      padding: .5rem 1rem;
+      border-radius: var(--radius-4);
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-medium);
+      font-family: var(--default-font-family);
+      cursor: pointer;
+      border: none;
+      letter-spacing: -.01em;
+      white-space: nowrap;
+      transition: background var(--dur) var(--ease-out),
+                  color var(--dur) var(--ease-out),
+                  box-shadow var(--dur) var(--ease-out);
+      text-decoration: none;
+    }
+
+    .btn-primary { background: var(--fg-4); color: var(--bg-1); }
+    .btn-primary:hover { background: #000; }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--fg-4);
+      border: 1px solid var(--gray-2);
+    }
+    .btn-ghost:hover { background: var(--bg-2); }
+
+    .btn-white { background: var(--bg-1); color: var(--fg-4); }
+    .btn-white:hover { background: var(--bg-2); }
+
+    .btn-lg {
+      padding: .75rem 1.5rem;
+      font-size: var(--text-base);
+      border-radius: var(--radius-5);
+    }
+
+    /* ============================================================
+       NAV
+    ============================================================ */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, .9);
+      backdrop-filter: blur(var(--blur-md));
+      -webkit-backdrop-filter: blur(var(--blur-md));
+      border-bottom: 1px solid var(--gray-2);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-extrabold);
+      color: var(--fg-4);
+      letter-spacing: -.02em;
+    }
+
+    .nav-logo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--sky-4);
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--fg-3);
+      transition: color var(--dur);
+    }
+    .nav-links a:hover { color: var(--fg-4); }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero {
+      padding-top: 120px;
+      padding-bottom: 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Gradient blob behind screenshot */
+    .hero-gradient {
+      position: absolute;
+      bottom: -80px;
+      left: -10%;
+      right: -10%;
+      height: 680px;
+      background: radial-gradient(ellipse 80% 60% at 50% 80%,
+        rgba(145, 141, 246, .22) 0%,
+        rgba(44, 120, 252, .14) 45%,
+        rgba(211, 27, 186, .08) 75%,
+        transparent 100%
+      );
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .hero-headline {
+      font-size: clamp(2.25rem, 5vw, 3.75rem);
+      font-weight: var(--font-weight-extrabold);
+      color: var(--fg-4);
+      line-height: 1.05;
+      letter-spacing: -.04em;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-sub {
+      font-size: var(--text-xl);
+      color: var(--fg-3);
+      line-height: var(--leading-relaxed);
+      font-weight: var(--font-weight-normal);
+      max-width: 500px;
+      margin: 0 auto 2rem;
+    }
+
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .75rem;
+      margin-bottom: 4rem;
+      flex-wrap: wrap;
+    }
+
+    /* Browser frame */
+    .hero-visual {
+      position: relative;
+      z-index: 2;
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .browser-frame {
+      background: var(--bg-1);
+      border-radius: var(--radius-3xl) var(--radius-3xl) 0 0;
+      box-shadow: var(--shadow-4),
+                  0 0 0 1px var(--gray-2);
+      overflow: hidden;
+    }
+
+    .browser-bar {
+      background: var(--bg-2);
+      padding: .75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      border-bottom: 1px solid var(--gray-2);
+    }
+
+    .browser-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-red    { background: #ff5f57; }
+    .dot-yellow { background: #febc2e; }
+    .dot-green  { background: #28c840; }
+
+    .browser-url-bar {
+      flex: 1;
+      background: var(--bg-1);
+      border: 1px solid var(--gray-2);
+      border-radius: var(--radius-3);
+      padding: .25rem .75rem;
+      font-size: var(--text-xs);
+      color: var(--fg-2);
+      text-align: center;
+      margin: 0 .5rem;
+    }
+
+    .browser-img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      background: var(--bg-2);
+      display: block;
+    }
+
+    /* ============================================================
+       VALUE SECTION  ("Get more from every meeting")
+    ============================================================ */
+    .value-section {
+      background: var(--bg-1);
+      border-top: 1px solid var(--gray-2);
+    }
+
+    .section-header-centered {
+      text-align: center;
+      max-width: 540px;
+      margin: 0 auto 3.5rem;
+    }
+
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .value-card {
+      background: var(--bg-1);
+      border: 1px solid var(--gray-2);
+      border-radius: var(--radius-6);
+      padding: 2rem;
+      box-shadow: var(--shadow-2);
+      transition: box-shadow var(--dur) var(--ease-out),
+                  border-color var(--dur) var(--ease-out);
+    }
+    .value-card:hover {
+      box-shadow: var(--shadow-3);
+      border-color: var(--gray-3);
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-size: var(--text-xs);
+      font-weight: var(--font-weight-semibold);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--sky-4);
+      background: var(--sky-1);
+      padding: .2rem .6rem;
+      border-radius: var(--radius-3);
+      margin-bottom: 1rem;
+    }
+
+    .value-card-headline {
+      font-size: var(--text-xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--fg-4);
+      letter-spacing: -.02em;
+      line-height: 1.3;
+      margin-bottom: .75rem;
+    }
+
+    .value-card-body {
+      font-size: var(--text-sm);
+      color: var(--fg-3);
+      line-height: var(--leading-relaxed);
+    }
+
+    /* ============================================================
+       HOW IT WORKS — visitors.now card style
+    ============================================================ */
+    .how-section {
+      background: var(--bg-1);
+      border-top: 1px solid var(--gray-2);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      position: relative;
+    }
+
+    .step {
+      background: var(--gray-1);
+      border-radius: var(--radius-2xl);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Visual block at the top of each card */
+    .step-visual {
+      background: var(--bg-2);
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+    }
+
+    /* Placeholder blobs to mimic the visual area */
+    .step-visual-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      width: 100%;
+      height: 100%;
+    }
+
+    .step-blob {
+      border-radius: 50%;
+      filter: blur(18px);
+      opacity: .55;
+      flex-shrink: 0;
+    }
+
+    /* Step 1 — calendar icon blobs */
+    .blob-blue  { width: 72px; height: 72px; background: var(--sky-3); }
+    .blob-purple { width: 56px; height: 56px; background: var(--purple-3); }
+
+    /* Step 2 — document blobs */
+    .blob-amber  { width: 64px; height: 64px; background: var(--amber-3); }
+    .blob-green  { width: 48px; height: 48px; background: var(--green-3); }
+
+    /* Step 3 — signal blobs */
+    .blob-indigo { width: 68px; height: 68px; background: var(--purple-4); }
+    .blob-sky    { width: 52px; height: 52px; background: var(--sky-3); }
+
+    /* Step icon pill (sits on top of blobs) */
+    .step-icon-pill {
+      position: absolute;
+      background: var(--bg-1);
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-3);
+    }
+
+    .step-icon-pill svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    /* Text area below visual */
+    .step-body {
+      padding: 1.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .step-num {
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--sky-4);
+      letter-spacing: .02em;
+    }
+
+    .step-title {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-semibold);
+      color: var(--fg-4);
+      letter-spacing: -.01em;
+    }
+
+    .step-desc {
+      font-size: var(--text-sm);
+      color: var(--fg-3);
+      line-height: var(--leading-relaxed);
+      max-width: 220px;
+    }
+
+    /* ============================================================
+       PRICING
+    ============================================================ */
+    .pricing-section {
+      background: var(--bg-1);
+      border-top: 1px solid var(--gray-2);
+    }
+
+    /* Monthly / Annual toggle */
+    .billing-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .75rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .billing-label {
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--fg-4);
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: var(--gray-3);
+      border-radius: 9999px;
+      transition: background var(--dur);
+      cursor: pointer;
+    }
+
+    .toggle-track::before {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--bg-1);
+      top: 3px;
+      left: 3px;
+      transition: transform var(--dur);
+      box-shadow: 0 1px 3px rgba(0,0,0,.2);
+    }
+
+    .toggle-switch input:checked ~ .toggle-track { background: var(--fg-4); }
+    .toggle-switch input:checked ~ .toggle-track::before { transform: translateX(20px); }
+
+    .save-pill {
+      background: #a024a3;
+      color: var(--bg-1);
+      font-size: var(--text-xs);
+      font-weight: var(--font-weight-semibold);
+      padding: .15rem .65rem;
+      border-radius: 9999px;
+    }
+
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      max-width: 660px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      border-radius: var(--radius-2xl);
+      overflow: hidden;
+      box-shadow: 0px 10px 15px rgba(0,0,0,.1), 0px 4px 6px rgba(0,0,0,.1);
+      display: flex;
+      flex-direction: column;
+      min-height: 278px;
+    }
+
+    .card-free { background: linear-gradient(180deg, #3187ff 0%, #334fde 97.995%); }
+    .card-pro  { background: linear-gradient(180deg, #d31bba 0%, #732c8e 100%); }
+
+    .pc-header {
+      padding: .875rem 1rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,.15);
+    }
+
+    .pc-plan {
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-medium);
+      color: rgba(255,255,255,.85);
+      margin-bottom: .25rem;
+    }
+
+    .pc-price {
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+    }
+
+    .pc-amount {
+      font-size: var(--text-2xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--bg-1);
+      letter-spacing: -.04em;
+      line-height: 2rem;
+    }
+
+    .pc-cadence {
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-medium);
+      color: rgba(255,255,255,.7);
+    }
+
+    .pc-features {
+      padding: .875rem 1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+
+    .pc-feature {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .pc-check {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      color: var(--bg-1);
+    }
+
+    .pc-feature-text {
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--bg-1);
+      line-height: var(--text-sm--lh);
+    }
+
+    .pc-footer {
+      padding: .875rem 1rem;
+    }
+
+    .pc-btn {
+      display: block;
+      width: 100%;
+      padding: .5rem 1rem;
+      border-radius: var(--radius-4);
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-medium);
+      font-family: var(--default-font-family);
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      letter-spacing: -.01em;
+      transition: background var(--dur);
+    }
+
+    .pc-btn-muted {
+      background: rgba(255,255,255,.2);
+      color: rgba(255,255,255,.8);
+      opacity: .65;
+    }
+
+    .pc-btn-active {
+      background: rgba(255,255,255,.95);
+      color: var(--fg-4);
+    }
+    .pc-btn-active:hover { background: var(--bg-1); }
+
+    /* ============================================================
+       FAQ
+    ============================================================ */
+    .faq-section {
+      background: var(--bg-2);
+      border-top: 1px solid var(--gray-2);
+    }
+
+    .faq-list {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    details.faq-item {
+      border-bottom: 1px solid var(--gray-2);
+    }
+
+    details.faq-item:first-of-type {
+      border-top: 1px solid var(--gray-2);
+    }
+
+    details.faq-item summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem 0;
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      color: var(--fg-4);
+      letter-spacing: -.01em;
+      user-select: none;
+    }
+
+    details.faq-item summary::-webkit-details-marker { display: none; }
+
+    .faq-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--bg-3);
+      color: var(--fg-3);
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform var(--dur), background var(--dur), color var(--dur);
+      line-height: 1;
+    }
+
+    details.faq-item[open] .faq-icon {
+      transform: rotate(45deg);
+      background: var(--fg-4);
+      color: var(--bg-1);
+    }
+
+    .faq-answer {
+      padding: 0 0 1.25rem;
+      font-size: var(--text-sm);
+      color: var(--fg-3);
+      line-height: var(--leading-relaxed);
+      max-width: 560px;
+    }
+
+    /* ============================================================
+       CTA BANNER
+    ============================================================ */
+    .cta-section {
+      background: var(--fg-4);
+      padding: 5rem 0;
+      text-align: center;
+    }
+
+    .cta-headline {
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-weight: var(--font-weight-extrabold);
+      color: var(--bg-1);
+      letter-spacing: -.03em;
+      line-height: 1.1;
+      margin-bottom: 2rem;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer {
+      background: var(--bg-1);
+      border-top: 1px solid var(--gray-2);
+      padding: 3rem 0;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .footer-brand-logo {
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-extrabold);
+      color: var(--fg-4);
+      letter-spacing: -.02em;
+      display: block;
+      margin-bottom: .625rem;
+    }
+
+    .footer-brand-tagline {
+      font-size: var(--text-sm);
+      color: var(--fg-3);
+      line-height: var(--leading-relaxed);
+      max-width: 220px;
+    }
+
+    .footer-col-title {
+      font-size: var(--text-xs);
+      font-weight: var(--font-weight-semibold);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-widest);
+      color: var(--fg-4);
+      margin-bottom: 1rem;
+    }
+
+    .footer-links li + li { margin-top: .625rem; }
+
+    .footer-links a {
+      font-size: var(--text-sm);
+      color: var(--fg-3);
+      transition: color var(--dur);
+    }
+    .footer-links a:hover { color: var(--fg-4); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--gray-2);
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+    }
+
+    .footer-copy {
+      font-size: var(--text-xs);
+      color: var(--fg-2);
+    }
+
+    /* ============================================================
+       ANIMATIONS
+    ============================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+
+    .fade-up             { animation: fadeUp .55s var(--ease-out) both; }
+    .delay-1             { animation-delay: .1s; }
+    .delay-2             { animation-delay: .2s; }
+    .delay-3             { animation-delay: .3s; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+
+      .hero-headline { font-size: 2.25rem; }
+
+      .value-grid  { grid-template-columns: 1fr; }
+
+      .steps {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+      }
+
+      .step-visual { height: 160px; }
+
+      .step-body { text-align: center; align-items: center; }
+
+      .pricing-cards { grid-template-columns: 1fr; max-width: 380px; }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+
+      .footer-grid > div:first-child { grid-column: 1 / -1; }
+
+      .section-title { font-size: var(--text-3xl); }
+    }
+
+    @media (max-width: 480px) {
+      .hero-ctas {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero-ctas .btn { width: 100%; max-width: 280px; }
+
+      .footer-grid { grid-template-columns: 1fr; }
+
+      .footer-bottom { flex-direction: column; gap: .5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================================================================
+       NAV
+  ================================================================ -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="container nav-inner">
+
+      <a href="/" class="nav-logo" aria-label="Meeting AI — home">
+        <span class="nav-logo-dot" aria-hidden="true"></span>
+        Meeting AI
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="founders-story.html">Founder's Story</a></li>
+      </ul>
+
+      <a href="#" class="btn btn-primary">Get started free</a>
+
+    </div>
+  </nav>
+
+  <!-- ================================================================
+       MAIN
+  ================================================================ -->
+  <main>
+
+    <!-- ── HERO ────────────────────────────────────────────────────── -->
+    <section class="hero" aria-labelledby="hero-headline">
+      <div class="hero-gradient" aria-hidden="true"></div>
+
+      <div class="hero-content">
+        <h1 class="hero-headline fade-up" id="hero-headline">
+          Never blank out<br>in a meeting again.
+        </h1>
+
+        <p class="hero-sub fade-up delay-1">
+          AI Meeting Assistance that proactively reasons with you and tells you what to say.
+        </p>
+
+        <div class="hero-ctas fade-up delay-2">
+          <a href="#" class="btn btn-primary btn-lg">Get started for free</a>
+          <a href="#how" class="btn btn-ghost btn-lg">See how it works</a>
+        </div>
+      </div>
+
+      <div class="hero-visual fade-up delay-3">
+        <div class="browser-frame">
+          <div class="browser-bar" aria-hidden="true">
+            <span class="browser-dot dot-red"></span>
+            <span class="browser-dot dot-yellow"></span>
+            <span class="browser-dot dot-green"></span>
+            <span class="browser-url-bar">app.meetingai.com &middot; live session</span>
+          </div>
+          <img
+            class="browser-img"
+            src="https://placehold.co/1200x630/f5f5f5/b3b3b3?text=Meeting+AI+%E2%80%94+Live+Session"
+            alt="Meeting AI real-time AI meeting assistant — live session view showing intelligent signals during a call"
+            width="1200"
+            height="630"
+            loading="eager"
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- ── VALUE ("Get more from every meeting") ───────────────────── -->
+    <section id="features" class="value-section" aria-labelledby="value-title">
+      <div class="container">
+
+        <div class="section-header-centered">
+          <p class="section-label">What Meeting AI does</p>
+          <h2 class="section-title" id="value-title">Get more from every meeting</h2>
+          <p class="section-sub">No prep. No blanking out. Just clarity.</p>
+        </div>
+
+        <div class="value-grid">
+
+          <article class="value-card">
+            <span class="card-tag">Intelligence</span>
+            <h3 class="value-card-headline">Your second brain in meetings</h3>
+            <p class="value-card-body">
+              Spots risks, alignment gaps, and reasons through the difficult conversations — so you always know what's really being said, and what it means for you.
+            </p>
+          </article>
+
+          <article class="value-card">
+            <span class="card-tag">Facilitation</span>
+            <h3 class="value-card-headline">Facilitate meetings better</h3>
+            <p class="value-card-body">
+              Helpful shortcuts to help facilitate meetings and ensure quick alignment — frame the conversation, surface a summary, or generate the right question in one tap.
+            </p>
+          </article>
+
+          <article class="value-card">
+            <span class="card-tag">Context</span>
+            <h3 class="value-card-headline">Your context engine</h3>
+            <p class="value-card-body">
+              Ask anything mid-meeting. Get answers grounded in what's been said, the documents you uploaded, and the context that actually matters right now.
+            </p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── HOW IT WORKS ─────────────────────────────────────────────── -->
+    <section id="how" class="how-section" aria-labelledby="how-title">
+      <div class="container">
+
+        <div class="section-header-centered">
+          <p class="section-label">How it works</p>
+          <h2 class="section-title" id="how-title">Up and running in minutes</h2>
+          <p class="section-sub">Three steps. No engineering required.</p>
+        </div>
+
+        <div class="steps">
+
+          <!-- Step 1 — Add calendar -->
+          <div class="step">
+            <div class="step-visual" aria-hidden="true">
+              <div class="step-visual-inner">
+                <span class="step-blob blob-blue"></span>
+                <span class="step-blob blob-purple"></span>
+              </div>
+              <div class="step-icon-pill">
+                <!-- Calendar icon -->
+                <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="3" y="5" width="20" height="18" rx="3" stroke="#2c78fc" stroke-width="1.8"/>
+                  <path d="M3 10h20" stroke="#2c78fc" stroke-width="1.8"/>
+                  <path d="M9 3v4M17 3v4" stroke="#2c78fc" stroke-width="1.8" stroke-linecap="round"/>
+                  <rect x="7" y="13" width="3" height="3" rx=".5" fill="#2c78fc"/>
+                  <rect x="11.5" y="13" width="3" height="3" rx=".5" fill="#2c78fc"/>
+                  <rect x="16" y="13" width="3" height="3" rx=".5" fill="#2c78fc"/>
+                </svg>
+              </div>
+            </div>
+            <div class="step-body">
+              <p class="step-num">01</p>
+              <h3 class="step-title"><strong>Add your calendar.</strong> Connect Google or Outlook and Meeting AI knows what's coming.</h3>
+            </div>
+          </div>
+
+          <!-- Step 2 — Upload documents -->
+          <div class="step">
+            <div class="step-visual" aria-hidden="true">
+              <div class="step-visual-inner">
+                <span class="step-blob blob-amber"></span>
+                <span class="step-blob blob-green"></span>
+              </div>
+              <div class="step-icon-pill">
+                <!-- Document icon -->
+                <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 3h9l5 5v15a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2z" stroke="#918df6" stroke-width="1.8"/>
+                  <path d="M15 3v5h5" stroke="#918df6" stroke-width="1.8" stroke-linejoin="round"/>
+                  <path d="M9 13h8M9 17h5" stroke="#918df6" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="step-body">
+              <p class="step-num">02</p>
+              <h3 class="step-title"><strong>Upload your documents.</strong> Briefs, decks, context files. Meeting AI reads them so you don't have to.</h3>
+            </div>
+          </div>
+
+          <!-- Step 3 — Join meeting -->
+          <div class="step">
+            <div class="step-visual" aria-hidden="true">
+              <div class="step-visual-inner">
+                <span class="step-blob blob-indigo"></span>
+                <span class="step-blob blob-sky"></span>
+              </div>
+              <div class="step-icon-pill">
+                <!-- Signal / lightning icon -->
+                <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14 3L5 15h8l-1 8 10-13h-8l1-7z" stroke="#ffa600" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="step-body">
+              <p class="step-num">03</p>
+              <h3 class="step-title"><strong>Join your meeting.</strong> Meeting AI listens, reasons, and surfaces what matters in real time.</h3>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PRICING ──────────────────────────────────────────────────── -->
+    <section id="pricing" class="pricing-section" aria-labelledby="pricing-title">
+      <div class="container">
+
+        <div class="section-header-centered">
+          <p class="section-label">Pricing</p>
+          <h2 class="section-title" id="pricing-title">Simple pricing</h2>
+          <p class="section-sub">Start for free. Upgrade when you're ready.</p>
+        </div>
+
+        <!-- Toggle -->
+        <div class="billing-toggle" role="group" aria-label="Billing period">
+          <span class="billing-label" id="lbl-monthly">Monthly</span>
+
+          <label class="toggle-switch" aria-label="Switch to annual billing">
+            <input type="checkbox" id="billing-toggle">
+            <span class="toggle-track" aria-hidden="true"></span>
+          </label>
+
+          <span class="billing-label" id="lbl-annually">Annually</span>
+          <span class="save-pill">Save 35%</span>
+        </div>
+
+        <!-- Cards -->
+        <div class="pricing-cards">
+
+          <!-- Free -->
+          <div class="pricing-card card-free" role="article" aria-label="Free plan">
+            <div class="pc-header">
+              <p class="pc-plan">Free plan</p>
+              <div class="pc-price">
+                <span class="pc-amount" id="free-price">$0</span>
+              </div>
+            </div>
+
+            <div class="pc-features">
+              <div class="pc-feature">
+                <svg class="pc-check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8l3.5 3.5L13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="pc-feature-text">Up to 3 meetings</span>
+              </div>
+              <div class="pc-feature">
+                <svg class="pc-check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8l3.5 3.5L13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="pc-feature-text">1 calendar integration</span>
+              </div>
+              <div class="pc-feature">
+                <svg class="pc-check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8l3.5 3.5L13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="pc-feature-text">Limited AI usage per meeting</span>
+              </div>
+            </div>
+
+            <div class="pc-footer">
+              <button class="pc-btn pc-btn-muted" disabled>Current plan</button>
+            </div>
+          </div>
+
+          <!-- Pro -->
+          <div class="pricing-card card-pro" role="article" aria-label="Pro plan">
+            <div class="pc-header">
+              <p class="pc-plan">Pro plan</p>
+              <div class="pc-price">
+                <span class="pc-amount" id="pro-price">$25</span>
+                <span class="pc-cadence" id="pro-cadence">&thinsp;/ month</span>
+              </div>
+            </div>
+
+            <div class="pc-features">
+              <div class="pc-feature">
+                <svg class="pc-check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8l3.5 3.5L13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="pc-feature-text">Unlimited meetings</span>
+              </div>
+              <div class="pc-feature">
+                <svg class="pc-check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8l3.5 3.5L13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="pc-feature-text">Unlimited calendar integrations</span>
+              </div>
+              <div class="pc-feature">
+                <svg class="pc-check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8l3.5 3.5L13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="pc-feature-text">Switch models for complex reasoning</span>
+              </div>
+            </div>
+
+            <div class="pc-footer">
+              <button class="pc-btn pc-btn-active">Upgrade plan</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FAQ ──────────────────────────────────────────────────────── -->
+    <section id="faq" class="faq-section" aria-labelledby="faq-title">
+      <div class="container">
+
+        <div class="section-header-centered">
+          <p class="section-label">FAQ</p>
+          <h2 class="section-title" id="faq-title">Frequently asked questions</h2>
+          <p class="section-sub">Answers to the questions you're probably already thinking.</p>
+        </div>
+
+        <div class="faq-list">
+
+          <details class="faq-item">
+            <summary>
+              Does Meeting AI store or record audio?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <p class="faq-answer">
+              No. Meeting AI never stores or records audio. Transcription happens in real time and only the text transcript is processed. Audio never leaves your device.
+            </p>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              Which platforms does it work on?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <p class="faq-answer">
+              Meeting AI works on Google Meet, Zoom web, and Microsoft Teams web — running in Chrome on a desktop. If you're using browser-based meetings, you're good to go.
+            </p>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              How fast does Meeting AI surface insights?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <p class="faq-answer">
+              Within seconds of detecting a relevant moment — a risk, an alignment gap, a direct question. The goal is to give you enough time to think and respond, not a post-meeting summary.
+            </p>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              How is this different from Otter.ai or Fireflies?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <p class="faq-answer">
+              Those tools summarize after your meetings end. Meeting AI acts during them — surfacing risks, alignment gaps, and telling you what to say while the conversation is still happening. The value is in the moment, not the recap.
+            </p>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              Is there a free plan?
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <p class="faq-answer">
+              Yes — up to 3 meetings, no credit card required. Enough to decide whether Meeting AI is worth it before you commit to anything.
+            </p>
+          </details>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA BANNER ───────────────────────────────────────────────── -->
+    <section class="cta-section" aria-labelledby="cta-headline">
+      <div class="container">
+        <h2 class="cta-headline" id="cta-headline">
+          Your next meeting starts in minutes.<br>Be ready.
+        </h2>
+        <a href="#" class="btn btn-white btn-lg">Get started for free</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================================================================
+       FOOTER
+  ================================================================ -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+
+      <div class="footer-grid">
+
+        <div>
+          <a href="/" class="footer-brand-logo">Meeting AI</a>
+          <p class="footer-brand-tagline">Think clearly, speak confidently.</p>
+        </div>
+
+        <div>
+          <p class="footer-col-title">Product</p>
+          <ul class="footer-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#">Changelog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="footer-col-title">Company</p>
+          <ul class="footer-links">
+            <li><a href="founders-story.html">Founder's Story</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="footer-col-title">Legal</p>
+          <ul class="footer-links">
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">&copy; 2025 Meeting AI. All rights reserved.</p>
+        <p class="footer-copy">Built for people who want to matter in every room.</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ================================================================
+       JS — minimal, no dependencies
+  ================================================================ -->
+  <script>
+    // Smooth scroll anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href');
+        if (id === '#') return;
+        const el = document.querySelector(id);
+        if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth' }); }
+      });
+    });
+
+    // Pricing toggle: swap Pro price between monthly ($25) and annual ($16)
+    const toggle  = document.getElementById('billing-toggle');
+    const proAmt  = document.getElementById('pro-price');
+    const proCad  = document.getElementById('pro-cadence');
+
+    if (toggle && proAmt) {
+      toggle.addEventListener('change', () => {
+        if (toggle.checked) {
+          proAmt.textContent = '$16';
+          proCad.textContent = ' / month, billed annually';
+        } else {
+          proAmt.textContent = '$25';
+          proCad.textContent = ' / month';
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

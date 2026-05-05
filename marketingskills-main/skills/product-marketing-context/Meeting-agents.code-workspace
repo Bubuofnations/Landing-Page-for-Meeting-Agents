@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"name": "Meeting-agents",
+			"path": "../../../../Meeting-agents"
+		},
+		{
+			"name": "marketingskills-main",
+			"path": "../.."
+		},
+		{
+			"name": "clone-site",
+			"path": "../../../ai-marketing-skills-main/clone-site"
+		}
+	],
+	"settings": {}
+}
