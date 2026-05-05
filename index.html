@@ -390,14 +390,14 @@
 
     .browser-frame {
       background: var(--bg-1);
-      /* Top corners only — Figma: rounded-tl-24px rounded-tr-24px, no bottom radius */
       border-radius: 1.5rem 1.5rem 0 0;
       box-shadow:
         0 -2px 40px rgba(120, 100, 200, .14),
         0 0 0 1px rgba(0, 0, 0, .06);
       overflow: hidden;
-      /* Fixed 726px height from Figma — shows content, not aspect-ratio cropped */
       height: 726px;
+      position: relative;
+      /* anchors .hero-overlay to this frame, not hero-visual */
     }
 
     .browser-bar {
@@ -420,10 +420,18 @@
       pointer-events: none;
     }
 
-    .participants {
+    .top-media-layer {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 70px;
+      /* push below browser bar */
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+    }
+
+    .participants {
+      position: relative;
       display: flex;
     }
 
@@ -510,10 +518,351 @@
 
     /* Content area fills remaining height below browser bar (726 - 54 = 672px) */
     .browser-content {
-      background: #f7f7f7;
+      background: #ffffff;
       width: 100%;
       height: 672px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Dashboard scrollable main area */
+    .dash-main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 0 0;
+      display: flex;
+      justify-content: center;
+      scrollbar-width: none;
+    }
+    .dash-main::-webkit-scrollbar { display: none; }
+
+    .dash-col {
+      width: 100%;
+      max-width: 704px;
+      padding: 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .dash-heading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dash-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #18181b;
+      letter-spacing: -0.4px;
+      line-height: 28px;
+      white-space: nowrap;
+    }
+
+    .dash-signals {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding-bottom: 16px;
+    }
+
+    .signal-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .signal-card {
+      background: #f4f4f5;
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .signal-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+      white-space: nowrap;
+      flex-shrink: 0;
+      line-height: 18px;
+    }
+    .badge-risk { background: #b91c1c; }
+    .badge-alignment { background: #a16207; }
+    .badge-question { background: #525252; }
+
+    .signal-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: #18181b;
+      line-height: 20px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ============================================================
+       SUMMARY CARD — reusable badge + text component
+       Usage: <div class="summary-card">
+                <span class="signal-badge badge-risk summary-card__badge">Risk</span>
+                <p class="summary-card__text">…</p>
+              </div>
+       Extend with .badge-alignment, .badge-question etc. for other variants.
+    ============================================================ */
+    .summary-card {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      background: #f4f4f5;
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
+
+    .summary-card__badge {
+      flex-shrink: 0;
+      margin-right: 8px;
+    }
+
+    .summary-card__text {
+      flex: 1;
+      min-width: 0;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 500;
+      color: #18181b;
+      line-height: 20px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      line-clamp: 4;
+      -webkit-box-orient: vertical;
+    }
+
+    .say-this-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 2px 0;
+    }
+
+    .mic-icon-wrap {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      opacity: 0.5;
+    }
+
+    .say-this-text {
+      font-size: 14px;
+      color: #18181b;
+      line-height: 20px;
+    }
+
+    .say-this-text strong {
+      font-weight: 700;
+    }
+
+    /* Waveform talking indicator */
+    .talking-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .waveform-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #b5b3f9 0%, #689ffd 45%, #c026d3 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .waveform-bars {
+      display: flex;
+      align-items: center;
+      gap: 2.2px;
+      mix-blend-mode: overlay;
+    }
+
+    .wbar {
+      width: 1.5px;
+      border-radius: 18px;
+      background: white;
+    }
+
+    .talking-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: #71717a;
+      white-space: nowrap;
+    }
+
+    /* Dashboard bottom bar */
+    .dash-bottom {
+      flex-shrink: 0;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0 16px;
+      border-top: 1px solid #f4f4f5;
+    }
+
+    .dash-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .dash-action-btn {
+      height: 32px;
+      padding: 0 16px;
+      border: 1px solid #e4e4e7;
+      border-radius: 6px;
+      background: white;
+      font-size: 14px;
+      font-weight: 500;
+      color: #18181b;
+      white-space: nowrap;
+      cursor: default;
+      font-family: var(--font-geist);
+    }
+
+    .dash-chat {
+      width: 704px;
+      max-width: calc(100% - 32px);
+      height: 58px;
+      border: 1px solid #e4e4e7;
+      border-radius: 40px;
+      background: white;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      gap: 4px;
+    }
+
+    .dash-chat-plus {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .dash-chat-placeholder {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 500;
+      color: #71717a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    .dash-chat-send {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: black;
+      opacity: 0.3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .ai-disclaimer {
+      font-size: 12px;
+      color: #18181b;
+      text-align: center;
+      line-height: 20px;
+    }
+
+    /* Participant card — outside browser-frame, bleeds top-right */
+    .participants-card {
+      position: absolute;
+      top: -20px;
+      right: -34px;
+      width: 280px;
+      border-radius: 12px;
+      border: 3px solid #e4e4e7;
+      box-shadow: 0px 25px 50px -12px rgba(0,0,0,0.25);
+      overflow: hidden;
+      z-index: 10;
+      pointer-events: none; /* slots and videos inherit this */
+      background: #e4e4e7;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .pcard-slot {
+      position: relative;
+      width: 100%;
+      height: 160px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .pcard-slot-top { border-radius: 9px 9px 0 0; }
+    .pcard-slot-bottom { border-radius: 0 0 9px 9px; }
+
+    .pcard-video {
       display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .pcard-mute-btn {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      width: 32px;
+      height: 32px;
+      border-radius: 23px;
+      background: black;
+      opacity: 0.6;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: opacity .15s;
+      pointer-events: all; /* re-enable clicks on the button only */
+    }
+
+    .pcard-mute-btn:hover { opacity: 0.85; }
+
+    .pcard-mute-btn svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
     }
 
     /* ============================================================
@@ -1353,6 +1702,28 @@
         height: 346px;
       }
 
+      .participants-card {
+        display: none;
+      }
+
+      .dash-col {
+        max-width: 100%;
+        padding: 0 16px;
+      }
+
+      .dash-actions {
+        gap: 6px;
+      }
+
+      .dash-action-btn {
+        font-size: 12px;
+        padding: 0 10px;
+      }
+
+      .dash-chat {
+        width: calc(100% - 32px);
+      }
+
       .footer-grid {
         grid-template-columns: 1fr 1fr;
         gap: 2rem;
@@ -1384,6 +1755,14 @@
         text-align: center;
       }
     }
+
+    .browser-frame {
+      position: relative;
+      /* ✅ THIS IS CRITICAL */
+    }
+
+    /* hero-visual is the positioning context for participants-card */
+    /* (participants-card CSS is already defined in the main block above) */
   </style>
 </head>
 
@@ -1439,31 +1818,132 @@
 
       <div class="hero-visual fade-up delay-3">
         <div class="browser-frame">
+
           <div class="browser-bar" aria-hidden="true">
             <span class="browser-dot dot-red"></span>
             <span class="browser-dot dot-yellow"></span>
             <span class="browser-dot dot-green"></span>
             <span class="browser-url-bar">
-              app.meetingai.com &middot; live session
+              app.meetingai.com · live session
             </span>
           </div>
 
-          <div class="browser-content" role="img" aria-label="Meeting AI real-time session visualization">
+          <!-- Meeting AI dashboard mockup -->
+          <div class="browser-content">
+
+            <div class="dash-main">
+              <div class="dash-col">
+
+                <div class="dash-heading">
+                  <span class="dash-title">Q3 Planning Meeting</span>
+                </div>
+
+                <div class="dash-signals">
+
+                  <!-- Risk signal -->
+                  <div class="signal-item">
+                    <div class="summary-card">
+                      <span class="signal-badge badge-risk summary-card__badge">Risk</span>
+                      <p class="summary-card__text">Budget constraints may prevent hiring two senior engineers before the Q3 deadline — this blocks the platform migration timeline.</p>
+                    </div>
+                    <div class="say-this-row">
+                      <div class="mic-icon-wrap">
+                        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+                          <path d="M10 12.5a2.5 2.5 0 0 0 2.5-2.5V5a2.5 2.5 0 0 0-5 0v5a2.5 2.5 0 0 0 2.5 2.5z" stroke="#18181b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M15.833 10a5.833 5.833 0 0 1-11.666 0" stroke="#18181b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M10 15.833V17.5" stroke="#18181b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </div>
+                      <p class="say-this-text"><strong>Say this:</strong> We should flag the hiring risk to the steering committee now and explore contractor options to de-risk the timeline before it becomes a blocker.</p>
+                    </div>
+                  </div>
+
+                  <!-- Talking indicator -->
+                  <div class="talking-row">
+                    <div class="waveform-avatar">
+                      <div class="waveform-bars">
+                        <div class="wbar" style="height:13px"></div>
+                        <div class="wbar" style="height:6px"></div>
+                        <div class="wbar" style="height:4px"></div>
+                        <div class="wbar" style="height:6px"></div>
+                        <div class="wbar" style="height:13px"></div>
+                        <div class="wbar" style="height:7px"></div>
+                        <div class="wbar" style="height:3px"></div>
+                        <div class="wbar" style="height:6px"></div>
+                        <div class="wbar" style="height:5px"></div>
+                      </div>
+                    </div>
+                    <p class="talking-text">Someone's talking...</p>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom bar: action chips + chat input -->
+            <div class="dash-bottom">
+              <div class="dash-actions">
+                <button class="dash-action-btn">Frame meeting</button>
+                <button class="dash-action-btn">Summarize discussion</button>
+                <button class="dash-action-btn">Generate a question</button>
+                <button class="dash-action-btn">What needs alignment?</button>
+              </div>
+              <div class="dash-chat">
+                <div class="dash-chat-plus">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+                    <path d="M12 5v14M5 12h14" stroke="#18181b" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <p class="dash-chat-placeholder">Ask something about this meeting...</p>
+                <div class="dash-chat-send">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+                    <path d="M12 19V5M5 12l7-7 7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+              <p class="ai-disclaimer">AI can get things wrong. Review before acting.</p>
+            </div>
+
           </div>
+
         </div>
 
-        <!-- ✅ ADD THIS BLOCK (overlay) -->
-        <div class="hero-overlay">
-          <div class="participants">
-            <div class="participant">
-              <img src="https://i.pravatar.cc/300?img=1" alt="Participant A" />
-            </div>
-            <div class="participant">
-              <img src="https://i.pravatar.cc/300?img=2" alt="Participant B" />
-            </div>
+        <!-- Participant video card — bleeds out the top-right corner of the browser frame -->
+        <div class="participants-card">
+
+          <!-- Top video — has audio, mute/unmute button shown -->
+          <div class="pcard-slot pcard-slot-top">
+            <video class="pcard-video" id="pcard-video-top"
+              src="Professional_Woman_Video_A_man_with_short_brown_hair_wearing_a_blue_shirt_lVJ_IYYs.mp4"
+              autoplay loop muted playsinline></video>
+            <button class="pcard-mute-btn" id="pcard-mute-btn"
+              aria-label="Unmute" onclick="pcardToggleMute()">
+              <!-- volume-x icon (muted state) -->
+              <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <line x1="23" y1="9" x2="17" y2="15"/>
+                <line x1="17" y1="9" x2="23" y2="15"/>
+              </svg>
+              <!-- volume-2 icon (unmuted state, hidden by default) -->
+              <svg class="icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              </svg>
+            </button>
           </div>
+
+          <!-- Bottom video — no audio, no mute button -->
+          <div class="pcard-slot pcard-slot-bottom">
+            <video class="pcard-video"
+              src="Hyper-Realistic_Video_A_man_stands_in_front_of_a_blurred_background_as_3x5D5kGs.mp4"
+              autoplay loop muted playsinline></video>
+          </div>
+
         </div>
-      </div>
+
+      </div><!-- /hero-visual -->
+
     </section>
 
     <!-- ================================================================
@@ -1607,18 +2087,18 @@
                 <span class="step-blob blob-amber"></span>
                 <span class="step-blob blob-green"></span>
               </div>
+              <!-- Upload icon: arrow-up with base line -->
               <svg class="step-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"
                 aria-hidden="true">
-                <path
-                  d="M16.67 6.67h36.67l13.33 13.33v53.33a6.67 6.67 0 01-6.67 6.67H16.67A6.67 6.67 0 0110 73.33V13.33a6.67 6.67 0 016.67-6.67z"
-                  stroke="#18181b" stroke-width="4" fill="none" />
-                <path d="M53.33 6.67v13.33h13.34" stroke="#18181b" stroke-width="4" stroke-linejoin="round" />
-                <path d="M26.67 40h26.66M26.67 53.33h16.66" stroke="#18181b" stroke-width="4" stroke-linecap="round" />
+                <path d="M8 64h64" stroke="white" stroke-width="5" stroke-linecap="round" />
+                <path d="M40 54V14" stroke="white" stroke-width="5" stroke-linecap="round" />
+                <path d="M18 34l22-22 22 22" stroke="white" stroke-width="5" stroke-linecap="round"
+                  stroke-linejoin="round" />
               </svg>
             </div>
             <div class="step-body">
-              <p class="step-text"><strong>Upload your documents.</strong> Briefs, decks, context files. Meeting AI
-                reads them so you don't have to.</p>
+              <p class="step-title-text">Upload your documents.</p>
+              <p class="step-desc-text">Briefs, decks, context files. Meeting AI reads them so you don't have to.</p>
             </div>
           </div>
 
@@ -1628,15 +2108,19 @@
                 <span class="step-blob blob-indigo"></span>
                 <span class="step-blob blob-blue"></span>
               </div>
+              <!-- Sparkles icon: 4-pointed star + small accent stars -->
               <svg class="step-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"
                 aria-hidden="true">
-                <path d="M44 6.67L13.33 46.67h26.67l-4 26.66 33.33-43.33H43.33l4-23.33z" stroke="#18181b"
-                  stroke-width="4" stroke-linejoin="round" stroke-linecap="round" fill="none" />
+                <path d="M40 8L43.5 36.5L72 40L43.5 43.5L40 72L36.5 43.5L8 40L36.5 36.5Z" stroke="white"
+                  stroke-width="3" stroke-linejoin="round" fill="none" />
+                <path d="M17 14L18.8 20.2L25 22L18.8 23.8L17 30L15.2 23.8L9 22L15.2 20.2Z" fill="white" />
+                <path d="M63 51L64.8 57.2L71 59L64.8 60.8L63 67L61.2 60.8L55 59L61.2 57.2Z" fill="white" />
               </svg>
             </div>
             <div class="step-body">
-              <p class="step-text"><strong>Join your meeting.</strong> Meeting AI listens, reasons, and surfaces what
-                matters — in real time, as it happens.</p>
+              <p class="step-title-text">Join your meeting.</p>
+              <p class="step-desc-text">Meeting AI listens, reasons, and surfaces what matters — in real time, as it
+                happens.</p>
             </div>
           </div>
 
@@ -1887,6 +2371,27 @@
         proCad.textContent = toggle.checked ? ' / month, billed annually' : ' / month';
       });
     }
+    const nav = document.querySelector('.nav');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 10) {
+        nav.classList.add('nav--scrolled');
+      } else {
+        nav.classList.remove('nav--scrolled');
+      }
+    });
+
+    // Participant card — top video mute/unmute toggle
+    function pcardToggleMute() {
+      const video = document.getElementById('pcard-video-top');
+      const btn = document.getElementById('pcard-mute-btn');
+      video.muted = !video.muted;
+      if (!video.muted) video.volume = 1;
+      btn.querySelector('.icon-muted').style.display = video.muted ? '' : 'none';
+      btn.querySelector('.icon-unmuted').style.display = video.muted ? 'none' : '';
+      btn.setAttribute('aria-label', video.muted ? 'Unmute' : 'Mute');
+    }
+
   </script>
 
 </body>
