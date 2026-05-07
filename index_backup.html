@@ -249,7 +249,7 @@
       left: 0;
       right: 0;
       z-index: 100;
-      height: 80px; /* Figma: 50px button + 15px top/bottom padding */
+      height: 56px;
       display: flex;
       align-items: center;
       background: transparent;
@@ -295,17 +295,14 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 32px; /* Figma: gap-[32px] */
+      gap: 2rem;
     }
 
-    /* Figma 5556-6103: 16px / SemiBold (600) / #18181b */
     .nav-links a {
-      font-size: 16px;
-      font-weight: 600;
-      color: #18181b;
-      line-height: 24px;
-      transition: opacity var(--dur);
-      text-decoration: none;
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--fg-4);
+      transition: color var(--dur);
     }
 
     .nav-links a:hover {
@@ -316,7 +313,7 @@
        HERO
     ============================================================ */
     .hero {
-      padding-top: 134px; /* 80px nav + 54px breathing room (was 110px with 56px nav) */
+      padding-top: 110px;
       padding-bottom: 0;
       text-align: center;
       position: relative;
@@ -408,17 +405,9 @@
       height: 54px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
       gap: .5rem;
       padding: 0 1rem;
       border-bottom: 1px solid var(--gray-2);
-      flex-shrink: 0;
-    }
-
-    .browser-dots {
-      display: flex;
-      align-items: center;
-      gap: 8px;
       flex-shrink: 0;
     }
 
@@ -514,6 +503,7 @@
     }
 
     .browser-url-bar {
+      flex: 1;
       background: var(--bg-1);
       border: 1px solid var(--gray-2);
       border-radius: .375rem;
@@ -521,9 +511,9 @@
       font-size: var(--text-xs);
       color: var(--fg-2);
       text-align: center;
+      margin: 0 .5rem;
       font-family: var(--font-inter);
-      width: min(520px, 55%);
-      flex-shrink: 0;
+      max-width: 52%;
     }
 
     /* Content area fills remaining height below browser bar (726 - 54 = 672px) */
@@ -545,7 +535,10 @@
       justify-content: center;
       scrollbar-width: none;
     }
-    .dash-main::-webkit-scrollbar { display: none; }
+
+    .dash-main::-webkit-scrollbar {
+      display: none;
+    }
 
     .dash-col {
       width: 100%;
@@ -584,22 +577,6 @@
       gap: 4px;
     }
 
-    .signal-item--pending {
-      opacity: 0;
-      transform: translateY(16px);
-      pointer-events: none;
-    }
-
-    .signal-item--visible {
-      animation: signalSlideIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      pointer-events: auto;
-    }
-
-    @keyframes signalSlideIn {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
     .signal-card {
       background: #f4f4f5;
       border-radius: 8px;
@@ -621,9 +598,18 @@
       flex-shrink: 0;
       line-height: 18px;
     }
-    .badge-risk { background: #b91c1c; }
-    .badge-alignment { background: #a16207; }
-    .badge-question { background: #525252; }
+
+    .badge-risk {
+      background: #b91c1c;
+    }
+
+    .badge-alignment {
+      background: #a16207;
+    }
+
+    .badge-question {
+      background: #525252;
+    }
 
     .signal-text {
       font-size: 14px;
@@ -702,179 +688,42 @@
       font-weight: 700;
     }
 
-    /* Single content slot — one state visible at a time */
-    #content-slot {
-      text-align: left;
-    }
-
-    .content-state {
-      display: block;
-      text-align: left;
-      transition: opacity 0.25s ease;
-      will-change: opacity;
-      transform: translateZ(0);
-    }
-
-    /* Row layout inside talking/reasoning states
-       min-height: 40px matches soundbar height so Reasoning
-       occupies the same vertical space — no vertical shift on swap */
-    .status-row {
+    /* Waveform talking indicator */
+    .talking-row {
       display: flex;
       align-items: center;
       gap: 8px;
-      min-height: 40px;
     }
 
-    /* Figma 5875-15422 / 5875-15423 — font-normal 16px #18181b */
-    .talking-text {
-      font-size: 16px;
-      font-weight: 400;
-      color: #18181b;
-      line-height: 24px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-align: left;
-    }
-
-    /* ============================================================
-       SOUNDBAR — Figma ref 5832-14766
-       9 slim black bars with GSAP animation (motion retained)
-    ============================================================ */
-    .soundbar {
+    .waveform-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #b5b3f9 0%, #689ffd 45%, #c026d3 100%);
       display: flex;
       align-items: center;
-      gap: 3.72px;
-      padding: 8px 10px 8px 8px;
-      flex-shrink: 0;
-      height: 40px; /* fixed: prevents bar-height GSAP changes from shifting the row */
-    }
-
-    .sb-bar {
-      width: 2.693px;
-      border-radius: 33.666px;
-      background: #18181b;
-      transform-origin: center;
+      justify-content: center;
       flex-shrink: 0;
     }
 
-    .sb-bar:nth-child(1) { height: 24.24px; }
-    .sb-bar:nth-child(2) { height: 10.773px; }
-    .sb-bar:nth-child(3) { height: 8.08px; }
-    .sb-bar:nth-child(4) { height: 10.773px; }
-    .sb-bar:nth-child(5) { height: 24.24px; }
-    .sb-bar:nth-child(6) { height: 13.467px; }
-    .sb-bar:nth-child(7) { height: 5.387px; }
-    .sb-bar:nth-child(8) { height: 10.773px; }
-    .sb-bar:nth-child(9) { height: 9.427px; }
-
-    /* ============================================================
-       SHIMMER + ANIMATED DOTS — Figma 5875-15422 / 5875-15423
-       Shimmer wraps only the base text.
-       Dots are SIBLINGS (not children) of .shimmer-text, so they
-       never inherit -webkit-text-fill-color:transparent.
-    ============================================================ */
-    @keyframes textShimmer {
-      0%   { background-position: -200% center; }
-      100% { background-position:  200% center; }
-    }
-
-    .shimmer-text {
-      background: linear-gradient(90deg, #18181b 20%, #888 50%, #18181b 80%);
-      background-size: 200% auto;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: textShimmer 2s linear infinite;
-      will-change: background-position;
-      transform: translateZ(0);
-    }
-
-    @keyframes typingDot {
-      0%, 100% { opacity: 0; }
-      25%, 75%  { opacity: 1; }
-    }
-
-    /* Dots are siblings of .shimmer-text — plain color, never masked */
-    .typing-dot {
-      display: inline-block;
-      color: #18181b;
-      -webkit-text-fill-color: #18181b; /* explicit: not transparent */
-      animation: typingDot 1.2s infinite;
-      opacity: 0;
-    }
-    .typing-dot:nth-child(1) { animation-delay: 0s; }
-    .typing-dot:nth-child(2) { animation-delay: 0.4s; }
-    .typing-dot:nth-child(3) { animation-delay: 0.8s; }
-
-    /* ============================================================
-       AI RESPONSE CONTENT — Figma 5870-14982 / 5870-14985
-       16px left-aligned, element-by-element streaming via JS
-    ============================================================ */
-
-    /* Summary row: badge inline + text — baseline aligns badge label
-       with first line of the paragraph text */
-    .ai-response-summary {
+    .waveform-bars {
       display: flex;
-      align-items: baseline;
-      gap: 10px;
-      text-align: left;
+      align-items: center;
+      gap: 2.2px;
+      mix-blend-mode: overlay;
     }
 
-    .ai-response-text {
-      font-size: 16px;
+    .wbar {
+      width: 1.5px;
+      border-radius: 18px;
+      background: white;
+    }
+
+    .talking-text {
+      font-size: 14px;
       font-weight: 500;
-      color: #18181b;
-      line-height: 24px;
-      text-align: left;
-      margin: 0; /* remove <p> default margin — misaligns badge in flex row */
-    }
-
-    .ai-response-say {
-      margin-top: 12px;
-      text-align: left;
-    }
-
-    /* "You can say this:" bold label */
-    .ai-say-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: #18181b;
-      line-height: 24px;
-      margin: 0;
-      text-align: left;
-    }
-
-    /* Supporting paragraph */
-    .ai-say-body {
-      font-size: 16px;
-      font-weight: 500;
-      color: #18181b;
-      line-height: 24px;
-      margin: 0;
-      text-align: left;
-    }
-
-    /* Numbered list */
-    .ai-say-list {
-      margin: 0;
-      padding-left: 20px;
-      list-style-type: decimal;
-      text-align: left;
-    }
-
-    .ai-say-list li {
-      font-size: 16px;
-      font-weight: 500;
-      color: #18181b;
-      line-height: 24px;
-      text-align: left;
-    }
-
-    /* Streaming: [data-stream] elements start hidden, JS fades them in */
-    [data-stream] {
-      opacity: 0;
-      transition: opacity 0.2s ease;
+      color: #71717a;
+      white-space: nowrap;
     }
 
     /* Dashboard bottom bar */
@@ -886,6 +735,7 @@
       align-items: center;
       gap: 10px;
       padding: 8px 0 16px;
+      border-top: 1px solid #f4f4f5;
     }
 
     .dash-actions {
@@ -910,12 +760,6 @@
       white-space: nowrap;
       cursor: default;
       font-family: var(--font-geist);
-      transition: background .12s, border-color .12s;
-    }
-
-    .dash-action-btn:hover {
-      background: #f4f4f5;
-      border-color: #d4d4d8;
     }
 
     .dash-chat {
@@ -925,24 +769,11 @@
       border: 1px solid #e4e4e7;
       border-radius: 40px;
       background: white;
-      box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
       display: flex;
       align-items: center;
       padding: 0 8px;
       gap: 4px;
-      cursor: text;
-      transition: border-color .15s, box-shadow .15s;
-    }
-
-    .dash-chat:hover {
-      border-color: #93c5fd;
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.12), 0 1px 2px rgba(0,0,0,0.06);
-    }
-
-    .dash-chat:focus {
-      outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.20), 0 1px 2px rgba(0,0,0,0.08);
     }
 
     .dash-chat-plus {
@@ -964,7 +795,6 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      text-align: left;
       min-width: 0;
     }
 
@@ -991,14 +821,15 @@
     .participants-card {
       position: absolute;
       top: -20px;
-      right: -34px;
+      right: -58px;
       width: 280px;
       border-radius: 12px;
       border: 3px solid #e4e4e7;
-      box-shadow: 0px 25px 50px -12px rgba(0,0,0,0.25);
+      box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
       overflow: hidden;
       z-index: 10;
-      pointer-events: none; /* slots and videos inherit this */
+      pointer-events: none;
+      /* slots and videos inherit this */
       background: #e4e4e7;
       display: flex;
       flex-direction: column;
@@ -1013,8 +844,13 @@
       flex-shrink: 0;
     }
 
-    .pcard-slot-top { border-radius: 9px 9px 0 0; }
-    .pcard-slot-bottom { border-radius: 0 0 9px 9px; }
+    .pcard-slot-top {
+      border-radius: 9px 9px 0 0;
+    }
+
+    .pcard-slot-bottom {
+      border-radius: 0 0 9px 9px;
+    }
 
     .pcard-video {
       display: block;
@@ -1039,10 +875,13 @@
       justify-content: center;
       padding: 0;
       transition: opacity .15s;
-      pointer-events: all; /* re-enable clicks on the button only */
+      pointer-events: all;
+      /* re-enable clicks on the button only */
     }
 
-    .pcard-mute-btn:hover { opacity: 0.85; }
+    .pcard-mute-btn:hover {
+      opacity: 0.85;
+    }
 
     .pcard-mute-btn svg {
       width: 16px;
@@ -1390,119 +1229,11 @@
       height: 80px;
     }
 
-    /* ── Calendar icon carousel (step 1) ── */
-    .cal-carousel {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .cal-icon {
-      position: absolute;
-      width: 72px;
-      height: 72px;
-      will-change: transform, filter, opacity;
-    }
-
-    /*
-      Ping-pong loop (3.5s):
-      0–20%   Google centre / Outlook right   — hold
-      20–40%  Forward: Google → left, Outlook → centre
-      40–60%  Outlook centre / Google left    — hold
-      60–80%  Reverse: Outlook → right, Google → centre
-      80–100% Google centre / Outlook right   — hold (= start, loops cleanly)
-    */
-    @keyframes calGoogleSlide {
-      0%   { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
-      20%  { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
-      40%  { transform: translateX(-70px) scale(0.8); filter: blur(20px); opacity: 0.5;  }
-      60%  { transform: translateX(-70px) scale(0.8); filter: blur(20px); opacity: 0.5;  }
-      80%  { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
-      100% { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
-    }
-
-    @keyframes calOutlookSlide {
-      0%   { transform: translateX(70px)  scale(0.8); filter: blur(20px); opacity: 0.65; }
-      20%  { transform: translateX(70px)  scale(0.8); filter: blur(20px); opacity: 0.65; }
-      40%  { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
-      60%  { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
-      80%  { transform: translateX(70px)  scale(0.8); filter: blur(20px); opacity: 0.65; }
-      100% { transform: translateX(70px)  scale(0.8); filter: blur(20px); opacity: 0.65; }
-    }
-
-    .cal-icon--google  { animation: calGoogleSlide  3.5s linear infinite; }
-    .cal-icon--outlook { animation: calOutlookSlide 3.5s linear infinite; }
-
-    @media (prefers-reduced-motion: reduce) {
-      .cal-icon--google, .cal-icon--outlook { animation: none; }
-      .cal-icon--google  { transform: translateX(0)    scale(1);   filter: blur(0px);  opacity: 1;    }
-      .cal-icon--outlook { transform: translateX(70px) scale(0.8); filter: blur(20px); opacity: 0.65; }
-    }
-
     .step-body {
       padding: 3.125rem 2.5rem;
       display: flex;
       flex-direction: column;
       gap: .625rem;
-    }
-
-    /* ── Meeting app carousel (step 3) ── */
-    .meet-icon {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      will-change: transform, filter, opacity;
-    }
-
-    .meet-icon img {
-      display: block;
-      height: auto;
-      object-fit: contain;
-    }
-
-    /*
-      3-position continuous band, T = 5s, stagger = 1.25s (25% each).
-      Three icons always visible: left-blurred | centre-sharp | right-blurred.
-      Incoming pushes current to left; departed icon wraps to right.
-      Motion values mirror calendar: ±70px, scale(0.8), blur(20px), opacity 0.5/0.65.
-      0–15%:    centre hold    (0.75s ≈ calendar's 0.7s)
-      15–25%:   slide → left   (0.5s) — simultaneous with right → centre (90–100%)
-      25–40%:   left-blurred hold
-      40–40.5%: teleport left → right (invisible)
-      40.5–60%: invisible at right
-      60–75%:   fade in at right blurred
-      75–90%:   right-blurred hold
-      90–100%:  slide → centre (0.5s) — simultaneous with centre → left (15–25%)
-      Stagger: Zoom 0s | Teams -1.25s | Webex -2.5s | Meet -3.75s
-      → at t=0: Teams=left, Zoom=centre, Meet=right (matches Figma)
-    */
-    @keyframes meetCarousel {
-      0%      { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
-      15%     { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
-      25%     { transform: translateX(-70px) scale(0.8); filter: blur(20px); opacity: 0.5;  }
-      40%     { transform: translateX(-70px) scale(0.8); filter: blur(20px); opacity: 0.5;  }
-      40.5%   { transform: translateX(70px)  scale(0.8); filter: blur(20px); opacity: 0;    }
-      60%     { transform: translateX(70px)  scale(0.8); filter: blur(20px); opacity: 0;    }
-      75%     { transform: translateX(70px)  scale(0.8); filter: blur(20px); opacity: 0.65; }
-      90%     { transform: translateX(70px)  scale(0.8); filter: blur(20px); opacity: 0.65; }
-      100%    { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
-    }
-
-    .meet-icon { animation: meetCarousel 5s linear infinite; }
-    .meet-icon--zoom  { animation-delay:     0s; }
-    .meet-icon--teams { animation-delay: -1.25s; }
-    .meet-icon--webex { animation-delay:  -2.5s; }
-    .meet-icon--meet  { animation-delay: -3.75s; }
-
-    @media (prefers-reduced-motion: reduce) {
-      .meet-icon { animation: none; opacity: 0; }
-      .meet-icon--zoom  { opacity: 1; transform: translateX(0)    scale(1);   filter: blur(0);   }
-      .meet-icon--teams { opacity: 0.5; transform: translateX(-70px) scale(0.8); filter: blur(20px); }
-      .meet-icon--meet  { opacity: 0.65; transform: translateX(70px)  scale(0.8); filter: blur(20px); }
     }
 
     .step-title-text {
@@ -2075,7 +1806,7 @@
         <li><a href="#pricing">Pricing</a></li>
         <li><a href="founders-story.html">Founder's Story</a></li>
       </ul>
-      <a href="#" class="btn btn-primary btn-lg">Get started for free</a>
+      <a href="#" class="btn btn-primary">Get started for free</a>
     </div>
   </nav>
 
@@ -2113,23 +1844,33 @@
         <div class="browser-frame">
 
           <div class="browser-bar" aria-hidden="true">
-            <div class="browser-dots">
-              <span class="browser-dot dot-red"></span>
-              <span class="browser-dot dot-yellow"></span>
-              <span class="browser-dot dot-green"></span>
-            </div>
+            <span class="browser-dot dot-red"></span>
+            <span class="browser-dot dot-yellow"></span>
+            <span class="browser-dot dot-green"></span>
             <span class="browser-url-bar">
               app.meetingai.com · live session
             </span>
-            <div class="browser-dots" style="opacity:0;" aria-hidden="true">
-              <span class="browser-dot dot-red"></span>
-              <span class="browser-dot dot-yellow"></span>
-              <span class="browser-dot dot-green"></span>
-            </div>
           </div>
 
           <!-- Meeting AI dashboard mockup -->
           <div class="browser-content">
+
+            <div class="gsap-wrapper">
+              <div class="container">
+                <div class="blob blob1"></div>
+                <div class="blob blob2"></div>
+
+                <div class="wave">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+              </div>
+            </div>
 
             <div class="dash-main">
               <div class="dash-col">
@@ -2139,53 +1880,49 @@
                 </div>
 
                 <div class="dash-signals">
-                  <div id="content-slot">
 
-                    <!-- State 1: Someone's talking... (visible at t=0) -->
-                    <div id="state-talking" class="content-state">
-                      <div class="status-row">
-                        <div class="soundbar" id="soundbar-bars">
-                          <div class="sb-bar"></div>
-                          <div class="sb-bar"></div>
-                          <div class="sb-bar"></div>
-                          <div class="sb-bar"></div>
-                          <div class="sb-bar"></div>
-                          <div class="sb-bar"></div>
-                          <div class="sb-bar"></div>
-                          <div class="sb-bar"></div>
-                          <div class="sb-bar"></div>
-                        </div>
-                        <p class="talking-text"><span class="shimmer-text">Someone's talking</span><span class="typing-dot">.</span><span class="typing-dot">.</span><span class="typing-dot">.</span></p>
-                      </div>
+                  <!-- Risk signal -->
+                  <div class="signal-item">
+                    <div class="summary-card">
+                      <span class="signal-badge badge-risk summary-card__badge">Risk</span>
+                      <p class="summary-card__text">Budget constraints may prevent hiring two senior engineers before
+                        the Q3 deadline — this blocks the platform migration timeline.</p>
                     </div>
-
-                    <!-- State 2: Reasoning... (hidden until t=6s) -->
-                    <div id="state-reasoning" class="content-state" style="display:none;">
-                      <div class="status-row">
-                        <p class="talking-text"><span class="shimmer-text">Reasoning</span><span class="typing-dot">.</span><span class="typing-dot">.</span><span class="typing-dot">.</span></p>
+                    <div class="say-this-row">
+                      <div class="mic-icon-wrap">
+                        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+                          <path d="M10 12.5a2.5 2.5 0 0 0 2.5-2.5V5a2.5 2.5 0 0 0-5 0v5a2.5 2.5 0 0 0 2.5 2.5z"
+                            stroke="#18181b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M15.833 10a5.833 5.833 0 0 1-11.666 0" stroke="#18181b" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M10 15.833V17.5" stroke="#18181b" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        </svg>
                       </div>
+                      <p class="say-this-text"><strong>Say this:</strong> We should flag the hiring risk to the steering
+                        committee now and explore contractor options to de-risk the timeline before it becomes a
+                        blocker.</p>
                     </div>
-
-                    <!-- State 3: AI response (hidden until t=7s, streams in element-by-element) -->
-                    <div id="state-ai" class="content-state" style="display:none;">
-                      <!-- Summary: badge inline + text (Figma 5870-14982) -->
-                      <div class="ai-response-summary" data-stream>
-                        <span class="signal-badge badge-risk" style="flex-shrink:0;">Risk</span>
-                        <p class="ai-response-text">No clear owner has been assigned for the infrastructure migration initiative. Without explicit accountability, this critical path item is at high risk of slipping past the Q3 deadline — potentially blocking dependent workstreams including the platform launch and data pipeline cutover. This gap emerged during the meeting with no volunteer or assignment surfacing from the discussion.</p>
-                      </div>
-                      <!-- Say this: bold title + paragraph + numbered list (Figma 5870-14985) -->
-                      <div class="ai-response-say">
-                        <p class="ai-say-title" data-stream>You can say this:</p>
-                        <p class="ai-say-body" data-stream>Before we close out this agenda item, it is worth pausing to address the ownership gap directly. Unassigned initiatives at this stage of the quarter rarely resolve themselves, and the infrastructure migration sits on the critical path for at least three downstream workstreams. Here is a structured approach to resolving this before the meeting ends:</p>
-                        <ol class="ai-say-list">
-                          <li data-stream>Identify a willing owner from the team present — ideally someone with infrastructure context who has capacity before end of Q3. If no one volunteers, escalate to the engineering lead before end of day.</li>
-                          <li data-stream>Define a lightweight accountability structure: a weekly check-in, a single status document, and a clear definition of done for the migration milestone so progress is visible to stakeholders.</li>
-                          <li data-stream>Set a decision checkpoint — if the migration is not on track by the end of week two of Q3, trigger an immediate escalation to the steering committee with options to scope down or extend the timeline.</li>
-                        </ol>
-                      </div>
-                    </div>
-
                   </div>
+
+                  <!-- Talking indicator -->
+                  <div class="talking-row">
+                    <div class="waveform-avatar">
+                      <div class="waveform-bars">
+                        <div class="wbar" style="height:13px"></div>
+                        <div class="wbar" style="height:6px"></div>
+                        <div class="wbar" style="height:4px"></div>
+                        <div class="wbar" style="height:6px"></div>
+                        <div class="wbar" style="height:13px"></div>
+                        <div class="wbar" style="height:7px"></div>
+                        <div class="wbar" style="height:3px"></div>
+                        <div class="wbar" style="height:6px"></div>
+                        <div class="wbar" style="height:5px"></div>
+                      </div>
+                    </div>
+                    <p class="talking-text">Someone's talking...</p>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -2198,16 +1935,17 @@
                 <button class="dash-action-btn">Generate a question</button>
                 <button class="dash-action-btn">What needs alignment?</button>
               </div>
-              <div class="dash-chat" tabindex="0" role="textbox" aria-label="Ask something about this meeting..." aria-readonly="true">
+              <div class="dash-chat">
                 <div class="dash-chat-plus">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-                    <path d="M12 5v14M5 12h14" stroke="#18181b" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 5v14M5 12h14" stroke="#18181b" stroke-width="2" stroke-linecap="round" />
                   </svg>
                 </div>
                 <p class="dash-chat-placeholder">Ask something about this meeting...</p>
                 <div class="dash-chat-send">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-                    <path d="M12 19V5M5 12l7-7 7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 19V5M5 12l7-7 7 7" stroke="white" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
                   </svg>
                 </div>
               </div>
@@ -2224,21 +1962,22 @@
           <!-- Top video — has audio, mute/unmute button shown -->
           <div class="pcard-slot pcard-slot-top">
             <video class="pcard-video" id="pcard-video-top"
-              src="Professional_Woman_Video_A_man_with_short_brown_hair_wearing_a_blue_shirt_lVJ_IYYs.mp4"
-              autoplay loop muted playsinline></video>
-            <button class="pcard-mute-btn" id="pcard-mute-btn"
-              aria-label="Unmute" onclick="pcardToggleMute()">
+              src="Professional_Woman_Video_A_man_with_short_brown_hair_wearing_a_blue_shirt_lVJ_IYYs.mp4" autoplay loop
+              muted playsinline></video>
+            <button class="pcard-mute-btn" id="pcard-mute-btn" aria-label="Unmute" onclick="pcardToggleMute()">
               <!-- volume-x icon (muted state) -->
-              <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                <line x1="23" y1="9" x2="17" y2="15"/>
-                <line x1="17" y1="9" x2="23" y2="15"/>
+              <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <line x1="23" y1="9" x2="17" y2="15" />
+                <line x1="17" y1="9" x2="23" y2="15" />
               </svg>
               <!-- volume-2 icon (unmuted state, hidden by default) -->
-              <svg class="icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              <svg class="icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
               </svg>
             </button>
           </div>
@@ -2246,8 +1985,8 @@
           <!-- Bottom video — no audio, no mute button -->
           <div class="pcard-slot pcard-slot-bottom">
             <video class="pcard-video"
-              src="Hyper-Realistic_Video_A_man_stands_in_front_of_a_blurred_background_as_3x5D5kGs.mp4"
-              autoplay loop muted playsinline></video>
+              src="Hyper-Realistic_Video_A_man_stands_in_front_of_a_blurred_background_as_3x5D5kGs.mp4" autoplay loop
+              muted playsinline></video>
           </div>
 
         </div>
@@ -2370,16 +2109,19 @@
 
           <div class="step">
             <div class="step-visual" aria-hidden="true">
-              <div class="cal-carousel">
-                <!-- Google Calendar — starts active/centre -->
-                <div class="cal-icon cal-icon--google">
-                  <svg width="72" height="72" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#gcal-clip)"><path d="M61.0525 18.9492H18.9473V61.0545H61.0525V18.9492Z" fill="white"/><path d="M61.0524 80.0013L79.9998 61.0539L70.5261 59.4375L61.0524 61.0539L59.3232 69.7194L61.0524 80.0013Z" fill="#EA4335"/><path d="M0 61.0539V73.6855C0 77.1749 2.82632 80.0013 6.31579 80.0013H18.9474L20.8928 70.5276L18.9474 61.0539L8.62475 59.4375L0 61.0539Z" fill="#188038"/><path d="M79.9998 18.9474V6.31579C79.9998 2.82632 77.1734 0 73.684 0H61.0524C59.8996 4.6987 59.3232 8.15659 59.3232 10.3737C59.3232 12.5907 59.8996 15.4486 61.0524 18.9474C65.2429 20.1473 68.4008 20.7473 70.5261 20.7473C72.6514 20.7473 75.8093 20.1473 79.9998 18.9474Z" fill="#1967D2"/><path d="M80.0001 18.9492H61.0527V61.0545H80.0001V18.9492Z" fill="#FBBC04"/><path d="M61.0525 61.0508H18.9473V79.9982H61.0525V61.0508Z" fill="#34A853"/><path d="M61.0526 0H6.31579C2.82632 0 0 2.82632 0 6.31579V61.0526H18.9474V18.9474H61.0526V0Z" fill="#4285F4"/><path d="M27.5841 51.6097C26.0104 50.5465 24.9209 48.9939 24.3262 46.9413L27.9788 45.436C28.3104 46.6992 28.8893 47.6781 29.7156 48.3729C30.5367 49.0676 31.5367 49.4097 32.7051 49.4097C33.8999 49.4097 34.9262 49.0465 35.7841 48.3202C36.642 47.5939 37.0735 46.6676 37.0735 45.5465C37.0735 44.3992 36.6209 43.4623 35.7156 42.736C34.8104 42.0097 33.6735 41.6465 32.3156 41.6465H30.2051V38.0308H32.0999C33.2683 38.0308 34.2525 37.715 35.0525 37.0834C35.8525 36.4518 36.2525 35.5887 36.2525 34.4887C36.2525 33.5097 35.8946 32.7308 35.1788 32.1465C34.463 31.5623 33.5578 31.2676 32.4578 31.2676C31.3841 31.2676 30.5314 31.5518 29.8999 32.1255C29.2687 32.7007 28.7942 33.427 28.5209 34.236L24.9051 32.7308C25.3841 31.3729 26.263 30.1729 27.5525 29.136C28.842 28.0992 30.4893 27.5781 32.4893 27.5781C33.9683 27.5781 35.2999 27.8623 36.4788 28.436C37.6578 29.0097 38.5841 29.8044 39.2525 30.815C39.9209 31.8308 40.2525 32.9676 40.2525 34.2308C40.2525 35.5202 39.942 36.6097 39.3209 37.5044C38.6999 38.3992 37.9367 39.0834 37.0314 39.5623V39.7781C38.2003 40.26 39.2157 41.0516 39.9683 42.0676C40.7314 43.0939 41.1156 44.3202 41.1156 45.7518C41.1156 47.1834 40.7525 48.4623 40.0262 49.5834C39.2999 50.7044 38.2946 51.5887 37.0209 52.2308C35.742 52.8729 34.3051 53.1992 32.7104 53.1992C30.863 53.2044 29.1578 52.6729 27.5841 51.6097ZM50.0209 33.4834L46.0104 36.3834L44.0051 33.3413L51.1999 28.1518H53.9578V52.6308H50.0209V33.4834Z" fill="#4285F4"/></g><defs><clipPath id="gcal-clip"><rect width="80" height="80" fill="white"/></clipPath></defs></svg>
-                </div>
-                <!-- Outlook — starts right / blurred -->
-                <div class="cal-icon cal-icon--outlook">
-                  <svg width="72" height="72" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" rx="24" fill="#0072C6"/><path d="M46.2227 25.6016V35.3818L49.6405 37.534C49.7306 37.5602 49.9259 37.5621 50.0161 37.534L64.7259 27.6166C64.7259 26.4429 63.6311 25.6016 63.0133 25.6016H46.2227Z" fill="white"/><path d="M46.2226 39.0274L49.3418 41.1702C49.7813 41.4932 50.3108 41.1702 50.3108 41.1702C49.7831 41.4932 64.7277 31.5664 64.7277 31.5664V49.542C64.7277 51.4988 63.4752 52.3195 62.0667 52.3195H46.2207V39.0274H46.2226Z" fill="white"/><path d="M30.0718 34.5195C29.0089 34.5195 28.162 35.0191 27.5366 36.0162C26.9113 37.0134 26.5977 38.3336 26.5977 39.9768C26.5977 41.6444 26.9113 42.9627 27.5366 43.9317C28.162 44.9026 28.9826 45.3853 29.9967 45.3853C31.0427 45.3853 31.8728 44.9139 32.485 43.9712C33.0972 43.0284 33.4052 41.7195 33.4052 40.0463C33.4052 38.3017 33.1085 36.9439 32.5132 35.9731C31.9178 35.004 31.1047 34.5195 30.0718 34.5195Z" fill="white"/><path d="M15.2734 20.6338V58.8967L44.3814 65V15L15.2734 20.6338V20.6338ZM34.7514 46.2338C33.5213 47.8526 31.9176 48.6638 29.9382 48.6638C28.0096 48.6638 26.4396 47.8789 25.2246 46.3108C24.0115 44.7408 23.403 42.6977 23.403 40.1775C23.403 37.5164 24.019 35.3643 25.2528 33.7211C26.4866 32.0779 28.1204 31.2554 30.1542 31.2554C32.0753 31.2554 33.6302 32.0404 34.8152 33.6141C36.0021 35.1878 36.5955 37.261 36.5955 39.8357C36.5974 42.4817 35.9814 44.615 34.7514 46.2338Z" fill="white"/></svg>
-                </div>
+              <div class="step-blobs">
+                <span class="step-blob blob-purple"></span>
+                <span class="step-blob blob-sky"></span>
               </div>
+              <svg class="step-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <rect x="10" y="13.33" width="60" height="56.67" rx="8" stroke="white" stroke-width="4" fill="none" />
+                <path d="M10 30h60" stroke="white" stroke-width="4" />
+                <path d="M26.67 6.67v13.33M53.33 6.67v13.33" stroke="white" stroke-width="4" stroke-linecap="round" />
+                <rect x="20" y="40" width="10" height="10" rx="2" fill="white" />
+                <rect x="35" y="40" width="10" height="10" rx="2" fill="white" />
+                <rect x="50" y="40" width="10" height="10" rx="2" fill="white" />
+              </svg>
             </div>
             <div class="step-body">
               <p class="step-title-text">Add your calendar.</p>
@@ -2390,7 +2132,18 @@
 
           <div class="step">
             <div class="step-visual" aria-hidden="true">
-              <svg class="step-icon" width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.9289 6.26096C14.8043 4.3856 17.3478 3.33203 20 3.33203H48.3333C49.2174 3.33203 50.0652 3.68322 50.6904 4.30834L69.0237 22.6417C69.6488 23.2668 70 24.1146 70 24.9987V66.6654C70 69.3175 68.9464 71.8611 67.0711 73.7364C65.1957 75.6118 62.6522 76.6654 60 76.6654H20C17.3478 76.6654 14.8043 75.6118 12.9289 73.7364C11.0536 71.8611 10 69.3175 10 66.6654V13.332C10 10.6799 11.0536 8.13633 12.9289 6.26096ZM20 9.9987C19.1159 9.9987 18.2681 10.3499 17.643 10.975C17.0179 11.6001 16.6667 12.448 16.6667 13.332V66.6654C16.6667 67.5494 17.0179 68.3973 17.643 69.0224C18.2681 69.6475 19.1159 69.9987 20 69.9987H60C60.8841 69.9987 61.7319 69.6475 62.357 69.0224C62.9821 68.3973 63.3333 67.5494 63.3333 66.6654V26.3794L46.9526 9.9987H20Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M46.6663 3.33203C48.5073 3.33203 49.9997 4.82442 49.9997 6.66536V23.332H66.6663C68.5073 23.332 69.9997 24.8244 69.9997 26.6654C69.9997 28.5063 68.5073 29.9987 66.6663 29.9987H46.6663C44.8254 29.9987 43.333 28.5063 43.333 26.6654V6.66536C43.333 4.82442 44.8254 3.33203 46.6663 3.33203Z" fill="white"/></svg>
+              <div class="step-blobs">
+                <span class="step-blob blob-amber"></span>
+                <span class="step-blob blob-green"></span>
+              </div>
+              <!-- Upload icon: arrow-up with base line -->
+              <svg class="step-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <path d="M8 64h64" stroke="white" stroke-width="5" stroke-linecap="round" />
+                <path d="M40 54V14" stroke="white" stroke-width="5" stroke-linecap="round" />
+                <path d="M18 34l22-22 22 22" stroke="white" stroke-width="5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
             </div>
             <div class="step-body">
               <p class="step-title-text">Upload your documents.</p>
@@ -2399,25 +2152,19 @@
           </div>
 
           <div class="step">
-            <div class="step-visual" aria-hidden="true" style="overflow:visible;">
-              <div class="cal-carousel">
-                <!-- Zoom — starts at centre -->
-                <div class="meet-icon meet-icon--zoom">
-                  <img src="images/zoom.svg" alt="Zoom" style="width:170px;">
-                </div>
-                <!-- Google Meet — starts at right blurred -->
-                <div class="meet-icon meet-icon--meet">
-                  <img src="images/google-meet.svg" alt="Google Meet" style="width:80px;">
-                </div>
-                <!-- Microsoft Teams — starts at left blurred -->
-                <div class="meet-icon meet-icon--teams">
-                  <img src="images/microsoft-teams.svg" alt="Microsoft Teams" style="width:80px;">
-                </div>
-                <!-- Webex — invisible, waiting -->
-                <div class="meet-icon meet-icon--webex">
-                  <img src="images/webex.svg" alt="Webex" style="width:199.38px;">
-                </div>
+            <div class="step-visual" aria-hidden="true">
+              <div class="step-blobs">
+                <span class="step-blob blob-indigo"></span>
+                <span class="step-blob blob-blue"></span>
               </div>
+              <!-- Sparkles icon: 4-pointed star + small accent stars -->
+              <svg class="step-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <path d="M40 8L43.5 36.5L72 40L43.5 43.5L40 72L36.5 43.5L8 40L36.5 36.5Z" stroke="white"
+                  stroke-width="3" stroke-linejoin="round" fill="none" />
+                <path d="M17 14L18.8 20.2L25 22L18.8 23.8L17 30L15.2 23.8L9 22L15.2 20.2Z" fill="white" />
+                <path d="M63 51L64.8 57.2L71 59L64.8 60.8L63 67L61.2 60.8L55 59L61.2 57.2Z" fill="white" />
+              </svg>
             </div>
             <div class="step-body">
               <p class="step-title-text">Join your meeting.</p>
@@ -2654,7 +2401,6 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-
   <script>
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', e => {
@@ -2695,74 +2441,35 @@
       btn.querySelector('.icon-unmuted').style.display = video.muted ? 'none' : '';
       btn.setAttribute('aria-label', video.muted ? 'Unmute' : 'Mute');
     }
+    // GSAP animation
+    gsap.to(".blob1", {
+      x: 40,
+      y: -30,
+      duration: 4,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut"
+    });
 
-    // GSAP Soundbar — Figma 5832-14766, motion retained from original
-    (function () {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    gsap.to(".blob2", {
+      x: -40,
+      y: 30,
+      duration: 5,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut"
+    });
 
-      var baseHeights = [24.24, 10.773, 8.08, 10.773, 24.24, 13.467, 5.387, 10.773, 9.427];
-      var bars = gsap.utils.toArray('.sb-bar');
-      var random = function (min, max) { return Math.random() * (max - min) + min; };
-
-      bars.forEach(function (bar, i) {
-        var base = baseHeights[i] || 10;
-        gsap.to(bar, {
-          height: function () { return random(base * 0.45, base * 1.55); },
-          duration: random(0.28, 0.42),
-          ease: 'sine.inOut',
-          repeat: -1,
-          yoyo: true,
-          delay: random(0, 0.3)
-        });
-      });
-    })();
-
-    // Mockup animation timeline — single slot, strict replacement
-    (function () {
-      function switchToState(fromId, toId, onVisible) {
-        var from = fromId ? document.getElementById(fromId) : null;
-        var to   = document.getElementById(toId);
-        if (!to) return;
-
-        if (from) {
-          from.style.opacity = '0';
-          setTimeout(function () {
-            from.style.display = 'none';
-            to.style.opacity = '0';
-            to.style.display = 'block';
-            requestAnimationFrame(function () {
-              to.style.opacity = '1';
-              if (onVisible) onVisible(to);
-            });
-          }, 250);
-        } else {
-          to.style.opacity = '1';
-          if (onVisible) onVisible(to);
-        }
+    gsap.to(".bar", {
+      scaleY: () => Math.random() * 1.5 + 0.5,
+      transformOrigin: "center bottom",
+      duration: 0.6,
+      stagger: {
+        each: 0.1,
+        repeat: -1,
+        yoyo: true
       }
-
-      function streamElements(container) {
-        var els = Array.prototype.slice.call(container.querySelectorAll('[data-stream]'));
-        els.forEach(function (el, i) {
-          setTimeout(function () { el.style.opacity = '1'; }, i * 400);
-        });
-      }
-
-      // t=0: state-talking already display:block in HTML
-
-      // t=6s: replace talking → reasoning
-      setTimeout(function () {
-        switchToState('state-talking', 'state-reasoning');
-      }, 6000);
-
-      // t=7s: replace reasoning → AI response, stream elements top→bottom
-      setTimeout(function () {
-        switchToState('state-reasoning', 'state-ai', function (el) {
-          streamElements(el);
-        });
-      }, 7000);
-    })();
-
+    }); 
   </script>
 
 </body>
