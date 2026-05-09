@@ -33,25 +33,10 @@ Do not design
 
 
 
+I believe people will spend less meeting hours to align
+AI will help people reason through conversations
+Align
 
-
-
-
-
-
-
-You are a senior product marketing strategist, UX writer, conversion copywriter, information architect, SEO strategist, churn prevention consultant, and AI-native landing page designer. Your task is to design and write a world-class landing page and supporting website architecture for a new AI product.
-
-I will paste additional positioning notes, HTML references, product strategy notes, competitor references, and feature breakdowns after this prompt. You must fully audit and synthesize all provided materials before generating any output.
-
-The objective is to create a highly-converting, minimal, landing page experience that communicates the product clearly within 20–30 seconds.
-
-IMPORTANT:
-
-* I may also paste raw HTML or screenshots from existing sites. Use them as visual and structural inspiration only.
-* Do not copy competitors directly.
-* Extract patterns, hierarchy, conversion strategies, layout ideas, and positioning approaches from them.
-* Improve upon them substantially in clarity, aesthetics, conversion, trust, simplicity, and SEO.
 
 Your responsibilities:
 

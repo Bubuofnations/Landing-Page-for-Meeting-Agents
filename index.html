@@ -168,7 +168,7 @@
     .container {
       max-width: 75rem;
       margin: 0 auto;
-      padding: 0 2rem;
+      padding: 0;
     }
 
     .section-title {
@@ -189,7 +189,7 @@
 
     .section-header-centered {
       text-align: center;
-      margin: 0 auto 4rem;
+      margin: 0 auto 32px;
     }
 
     /* ============================================================
@@ -203,7 +203,7 @@
       padding: .5rem 1.125rem;
       border-radius: var(--radius-5);
       font-size: var(--text-base);
-      font-weight: var(--font-weight-medium);
+      font-weight: var(--font-weight-semibold);
       font-family: var(--default-font-family);
       cursor: pointer;
       border: none;
@@ -249,21 +249,21 @@
       left: 0;
       right: 0;
       z-index: 100;
-      height: 80px; /* Figma: 50px button + 15px top/bottom padding */
+      height: 80px;
+      /* Figma: 50px button + 15px top/bottom padding */
       display: flex;
       align-items: center;
       background: transparent;
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
-      border-bottom: 1px solid transparent;
-      transition: background .25s ease, border-color .25s ease, backdrop-filter .25s ease;
+      transition: background .25s ease, box-shadow .25s ease, backdrop-filter .25s ease;
     }
 
     .nav--scrolled {
       background: rgba(255, 255, 255, .92);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border-bottom-color: var(--gray-2);
+      box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.05), 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
     }
 
     .nav-inner {
@@ -276,26 +276,20 @@
     .nav-logo {
       display: flex;
       align-items: center;
-      gap: .5rem;
-      font-size: var(--text-sm);
-      font-weight: var(--font-weight-extrabold);
-      color: var(--fg-4);
-      letter-spacing: -.02em;
-      font-family: var(--font-inter);
+      flex-shrink: 0;
     }
 
-    .nav-logo-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 4px;
-      background: var(--sky-4);
-      flex-shrink: 0;
+    .nav-logo svg {
+      display: block;
+      height: 34px;
+      width: auto;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 32px; /* Figma: gap-[32px] */
+      gap: 32px;
+      /* Figma: gap-[32px] */
     }
 
     /* Figma 5556-6103: 16px / SemiBold (600) / #18181b */
@@ -316,8 +310,9 @@
        HERO
     ============================================================ */
     .hero {
-      padding-top: 134px; /* 80px nav + 54px breathing room (was 110px with 56px nav) */
-      padding-bottom: 0;
+      padding-top: 134px;
+      /* 80px nav + 54px breathing room (was 110px with 56px nav) */
+      padding-bottom: 75px;
       text-align: center;
       position: relative;
       /* No overflow:hidden — browser frame must not be clipped */
@@ -350,7 +345,7 @@
     }
 
     .hero-headline {
-      font-size: clamp(2.5rem, 5vw, 3.75rem);
+      font-size: 72px;
       font-weight: var(--font-weight-semibold);
       color: var(--fg-4);
       line-height: 1.11;
@@ -359,7 +354,7 @@
     }
 
     .hero-sub {
-      font-size: var(--text-xl);
+      font-size: 24px;
       color: var(--fg-4);
       line-height: 1.6;
       font-weight: var(--font-weight-normal);
@@ -545,7 +540,10 @@
       justify-content: center;
       scrollbar-width: none;
     }
-    .dash-main::-webkit-scrollbar { display: none; }
+
+    .dash-main::-webkit-scrollbar {
+      display: none;
+    }
 
     .dash-col {
       width: 100%;
@@ -578,6 +576,11 @@
       padding-bottom: 16px;
     }
 
+    /* 84px gap (title → soundbar) only during the listening phase */
+    #state-listening {
+      padding-top: 60px;
+    }
+
     .signal-item {
       display: flex;
       flex-direction: column;
@@ -596,8 +599,15 @@
     }
 
     @keyframes signalSlideIn {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .signal-card {
@@ -612,18 +622,35 @@
     .signal-badge {
       display: inline-flex;
       align-items: center;
-      padding: 2px 10px;
+      justify-content: center;
+      height: 20px;
+      padding: 0 10px;
       border-radius: 9999px;
       font-size: 12px;
       font-weight: 600;
       color: white;
-      white-space: nowrap;
-      flex-shrink: 0;
-      line-height: 18px;
+      line-height: 20px;
+      vertical-align: middle;
     }
-    .badge-risk { background: #b91c1c; }
-    .badge-alignment { background: #a16207; }
-    .badge-question { background: #525252; }
+
+    /* Badge above the typewriter block — inline-flex hugs text width;
+       sits on its own line naturally because #ai-response-content (div) follows it */
+    .ai-badge {
+      margin-bottom: 10px;
+    }
+
+
+    .badge-risk {
+      background: #b91c1c;
+    }
+
+    .badge-alignment {
+      background: #a16207;
+    }
+
+    .badge-question {
+      background: #525252;
+    }
 
     .signal-text {
       font-size: 14px;
@@ -704,37 +731,52 @@
 
     /* Single content slot — one state visible at a time */
     #content-slot {
-      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
     }
 
     .content-state {
       display: block;
-      text-align: left;
       transition: opacity 0.25s ease;
       will-change: opacity;
       transform: translateZ(0);
+      width: 100%;
     }
 
-    /* Row layout inside talking/reasoning states
-       min-height: 40px matches soundbar height so Reasoning
-       occupies the same vertical space — no vertical shift on swap */
-    .status-row {
+    /* Centered vertical stack for status phase */
+    .status-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    /* Fixed-height wrapper — GSAP animates bar heights from center,
+       this container never grows so the label below never shifts */
+    .sb-wrapper {
       display: flex;
       align-items: center;
-      gap: 8px;
-      min-height: 40px;
+      justify-content: center;
+      height: 100px;
     }
 
-    /* Figma 5875-15422 / 5875-15423 — font-normal 16px #18181b */
-    .talking-text {
+    /* Label wrapper — fixed line-height so text swap never shifts layout */
+    .sb-label-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+    }
+
+    .status-label {
       font-size: 16px;
       font-weight: 400;
       color: #18181b;
       line-height: 24px;
+      text-align: center;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-align: left;
     }
 
     /* ============================================================
@@ -744,29 +786,27 @@
     .soundbar {
       display: flex;
       align-items: center;
-      gap: 3.72px;
-      padding: 8px 10px 8px 8px;
+      gap: 9.817px;
       flex-shrink: 0;
-      height: 40px; /* fixed: prevents bar-height GSAP changes from shifting the row */
     }
 
     .sb-bar {
-      width: 2.693px;
-      border-radius: 33.666px;
+      width: 7.107px;
+      border-radius: 88.842px;
       background: #18181b;
       transform-origin: center;
       flex-shrink: 0;
     }
 
-    .sb-bar:nth-child(1) { height: 24.24px; }
-    .sb-bar:nth-child(2) { height: 10.773px; }
-    .sb-bar:nth-child(3) { height: 8.08px; }
-    .sb-bar:nth-child(4) { height: 10.773px; }
-    .sb-bar:nth-child(5) { height: 24.24px; }
-    .sb-bar:nth-child(6) { height: 13.467px; }
-    .sb-bar:nth-child(7) { height: 5.387px; }
-    .sb-bar:nth-child(8) { height: 10.773px; }
-    .sb-bar:nth-child(9) { height: 9.427px; }
+    .sb-bar:nth-child(1) { height: 63.966px; }
+    .sb-bar:nth-child(2) { height: 28.429px; }
+    .sb-bar:nth-child(3) { height: 21.322px; }
+    .sb-bar:nth-child(4) { height: 28.429px; }
+    .sb-bar:nth-child(5) { height: 63.966px; }
+    .sb-bar:nth-child(6) { height: 35.537px; }
+    .sb-bar:nth-child(7) { height: 14.215px; }
+    .sb-bar:nth-child(8) { height: 28.429px; }
+    .sb-bar:nth-child(9) { height: 24.876px; }
 
     /* ============================================================
        SHIMMER + ANIMATED DOTS — Figma 5875-15422 / 5875-15423
@@ -775,8 +815,13 @@
        never inherit -webkit-text-fill-color:transparent.
     ============================================================ */
     @keyframes textShimmer {
-      0%   { background-position: -200% center; }
-      100% { background-position:  200% center; }
+      0% {
+        background-position: -200% center;
+      }
+
+      100% {
+        background-position: 200% center;
+      }
     }
 
     .shimmer-text {
@@ -791,33 +836,55 @@
     }
 
     @keyframes typingDot {
-      0%, 100% { opacity: 0; }
-      25%, 75%  { opacity: 1; }
+
+      0%,
+      100% {
+        opacity: 0;
+      }
+
+      25%,
+      75% {
+        opacity: 1;
+      }
     }
 
     /* Dots are siblings of .shimmer-text — plain color, never masked */
     .typing-dot {
       display: inline-block;
       color: #18181b;
-      -webkit-text-fill-color: #18181b; /* explicit: not transparent */
+      -webkit-text-fill-color: #18181b;
+      /* explicit: not transparent */
       animation: typingDot 1.2s infinite;
       opacity: 0;
     }
-    .typing-dot:nth-child(1) { animation-delay: 0s; }
-    .typing-dot:nth-child(2) { animation-delay: 0.4s; }
-    .typing-dot:nth-child(3) { animation-delay: 0.8s; }
+
+    .typing-dot:nth-child(1) {
+      animation-delay: 0s;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.4s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.8s;
+    }
 
     /* ============================================================
        AI RESPONSE CONTENT — Figma 5870-14982 / 5870-14985
        16px left-aligned, element-by-element streaming via JS
     ============================================================ */
 
-    /* Summary row: badge inline + text — baseline aligns badge label
-       with first line of the paragraph text */
+    /* AI response state — always left-aligned regardless of #content-slot centering */
+    #state-ai {
+      text-align: left;
+    }
+
+    /* Summary row: badge + paragraph as flex siblings, baseline aligned */
     .ai-response-summary {
       display: flex;
       align-items: baseline;
-      gap: 10px;
+      gap: 8px;
       text-align: left;
     }
 
@@ -825,13 +892,13 @@
       font-size: 16px;
       font-weight: 500;
       color: #18181b;
-      line-height: 24px;
+      line-height: 1.7;
       text-align: left;
-      margin: 0; /* remove <p> default margin — misaligns badge in flex row */
+      margin: 0 0 12px;
     }
 
     .ai-response-say {
-      margin-top: 12px;
+      margin-top: 20px;
       text-align: left;
     }
 
@@ -840,8 +907,8 @@
       font-size: 16px;
       font-weight: 700;
       color: #18181b;
-      line-height: 24px;
-      margin: 0;
+      line-height: 1.7;
+      margin: 0 0 10px;
       text-align: left;
     }
 
@@ -850,8 +917,8 @@
       font-size: 16px;
       font-weight: 500;
       color: #18181b;
-      line-height: 24px;
-      margin: 0;
+      line-height: 1.7;
+      margin: 0 0 12px;
       text-align: left;
     }
 
@@ -867,14 +934,19 @@
       font-size: 16px;
       font-weight: 500;
       color: #18181b;
-      line-height: 24px;
+      line-height: 1.7;
+      margin-bottom: 10px;
       text-align: left;
+    }
+
+    .ai-say-list li:last-child {
+      margin-bottom: 0;
     }
 
     /* Streaming: [data-stream] elements start hidden, JS fades them in */
     [data-stream] {
       opacity: 0;
-      transition: opacity 0.2s ease;
+      transition: opacity 0.05s linear;
     }
 
     /* Dashboard bottom bar */
@@ -905,7 +977,7 @@
       border-radius: 6px;
       background: white;
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 600;
       color: #18181b;
       white-space: nowrap;
       cursor: default;
@@ -925,7 +997,7 @@
       border: 1px solid #e4e4e7;
       border-radius: 40px;
       background: white;
-      box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
       display: flex;
       align-items: center;
       padding: 0 8px;
@@ -936,13 +1008,13 @@
 
     .dash-chat:hover {
       border-color: #93c5fd;
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.12), 0 1px 2px rgba(0,0,0,0.06);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12), 0 1px 2px rgba(0, 0, 0, 0.06);
     }
 
     .dash-chat:focus {
       outline: none;
       border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.20), 0 1px 2px rgba(0,0,0,0.08);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.20), 0 1px 2px rgba(0, 0, 0, 0.08);
     }
 
     .dash-chat-plus {
@@ -995,10 +1067,11 @@
       width: 280px;
       border-radius: 12px;
       border: 3px solid #e4e4e7;
-      box-shadow: 0px 25px 50px -12px rgba(0,0,0,0.25);
+      box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
       overflow: hidden;
       z-index: 10;
-      pointer-events: none; /* slots and videos inherit this */
+      pointer-events: none;
+      /* slots and videos inherit this */
       background: #e4e4e7;
       display: flex;
       flex-direction: column;
@@ -1013,8 +1086,13 @@
       flex-shrink: 0;
     }
 
-    .pcard-slot-top { border-radius: 9px 9px 0 0; }
-    .pcard-slot-bottom { border-radius: 0 0 9px 9px; }
+    .pcard-slot-top {
+      border-radius: 9px 9px 0 0;
+    }
+
+    .pcard-slot-bottom {
+      border-radius: 0 0 9px 9px;
+    }
 
     .pcard-video {
       display: block;
@@ -1039,10 +1117,13 @@
       justify-content: center;
       padding: 0;
       transition: opacity .15s;
-      pointer-events: all; /* re-enable clicks on the button only */
+      pointer-events: all;
+      /* re-enable clicks on the button only */
     }
 
-    .pcard-mute-btn:hover { opacity: 0.85; }
+    .pcard-mute-btn:hover {
+      opacity: 0.85;
+    }
 
     .pcard-mute-btn svg {
       width: 16px;
@@ -1051,260 +1132,257 @@
     }
 
     /* ============================================================
-       FEATURES — Figma style
-       #eff1f5 card + text below
+       FEATURES — Figma 6035:8186
     ============================================================ */
     .features-section {
-      padding: 7rem 0;
+      padding: 75px 0;
       background: var(--bg-1);
     }
 
     .feature-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
+      gap: 16px;
+      align-items: start;
     }
 
     .feature-item {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 24px;
     }
 
+    /* Card container — 390×500px, Figma 6035:8190 / 6067:11992 / 6060:11350 */
     .fc-card {
-      border-radius: var(--radius-4xl);
+      width: 390px;
+      height: 500px;
+      border-radius: 32px;
       overflow: hidden;
-      height: 340px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 3rem;
       position: relative;
-      background: var(--card-bg);
+      background: transparent;
     }
 
-    /* Inner white panel inside feature card */
-    .fc-inner {
-      background: var(--bg-1);
-      border-radius: 1rem;
-      box-shadow: var(--shadow-4);
-      width: 100%;
-      max-width: 260px;
-      padding: .875rem;
-      display: flex;
-      flex-direction: column;
-      gap: .5rem;
-    }
-
+    /* Text block below each card */
     .fc-text {
-      padding: 0 .25rem;
       display: flex;
       flex-direction: column;
-      gap: .625rem;
+      gap: 10px;
     }
 
     .fc-title {
-      font-size: var(--text-lg);
-      font-weight: var(--font-weight-semibold);
-      color: var(--fg-4);
-      line-height: 1.55;
-      letter-spacing: 0;
+      font-family: var(--font-geist);
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 32px;
+      letter-spacing: -0.4px;
+      color: #18181b;
     }
 
     .fc-body {
-      font-size: var(--text-lg);
-      color: var(--fg-4);
-      line-height: 1.6;
-      font-weight: var(--font-weight-normal);
+      font-family: var(--font-geist);
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 24px;
+      color: #18181b;
     }
 
-    /* Signal list rows */
-    .signal-row {
-      display: flex;
-      align-items: flex-start;
-      gap: .625rem;
-      padding: .5rem .625rem;
-      border-radius: .5rem;
-      background: var(--bg-1);
-      border: 1px solid var(--gray-2);
+    /* Alert cards — Card 1 (Figma 6062:11765) */
+    .fc-alert-card {
+      background: white;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.06);
+      border-radius: 8px;
+      padding: 12px 16px;
+      width: 155px;
     }
 
-    .signal-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 3.5px;
-      flex-shrink: 0;
-      margin-top: 4px;
-    }
-
-    .signal-title {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--fg-4);
-      line-height: 1.4;
-      font-family: var(--font-inter);
-    }
-
-    .signal-sub {
-      font-size: 10px;
-      color: var(--fg-2);
-      margin-top: 2px;
-      line-height: 1.4;
-      font-family: var(--font-inter);
-    }
-
-    /* Action panel */
-    .ap-label {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--fg-2);
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      font-family: var(--font-inter);
-    }
-
-    .ap-btn-row {
+    .fc-alert-row {
       display: flex;
       gap: 6px;
+      align-items: flex-start;
     }
 
-    .ap-chip {
+    .fc-alert-icon {
+      position: relative;
+      width: 13px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .fc-alert-icon img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      max-width: none;
+    }
+
+    .fc-alert-content {
       flex: 1;
-      background: var(--bg-2);
-      border-radius: .375rem;
-      padding: .375rem .5rem;
-      font-size: 10px;
-      font-weight: 500;
-      color: var(--fg-4);
-      text-align: center;
-      border: 1px solid var(--gray-2);
-      font-family: var(--font-inter);
-    }
-
-    .ap-chip.active {
-      background: var(--fg-4);
-      color: var(--bg-1);
-      border-color: var(--fg-4);
-    }
-
-    .ap-suggestion {
-      background: var(--sky-1);
-      border-radius: .5rem;
-      padding: .5rem .625rem;
-      border: 1px solid rgba(44, 120, 252, .15);
-      flex: 1;
-    }
-
-    .ap-suggestion-label {
-      font-size: 9px;
-      font-weight: 700;
-      color: var(--sky-4);
-      margin-bottom: 3px;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-      font-family: var(--font-inter);
-    }
-
-    .ap-suggestion-text {
-      font-size: 10px;
-      color: var(--fg-3);
-      line-height: 1.5;
-      font-family: var(--font-inter);
-    }
-
-    .ap-input {
-      background: var(--bg-2);
-      border: 1px solid var(--gray-2);
-      border-radius: .375rem;
-      padding: .375rem .625rem;
-      font-size: 10px;
-      color: var(--fg-2);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-family: var(--font-inter);
-    }
-
-    /* Chat panel */
-    .chat-panel {
+      min-width: 0;
       display: flex;
       flex-direction: column;
-      gap: .5rem;
-      width: 100%;
-      max-width: 260px;
-      position: relative;
+      gap: 8px;
     }
 
-    .chat-bubble {
-      border-radius: .5rem;
-      padding: .45rem .7rem;
-      font-size: 10.5px;
-      line-height: 1.5;
-      max-width: 88%;
-      font-family: var(--font-inter);
+    .fc-alert-title {
+      font-family: var(--font-geist);
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 18px;
+      color: #09090b;
+      white-space: nowrap;
     }
 
-    .chat-bubble.user {
-      background: var(--fg-4);
-      color: var(--bg-1);
-      align-self: flex-end;
-      border-radius: .5rem .5rem 2px .5rem;
-    }
-
-    .chat-bubble.ai {
-      background: var(--bg-2);
-      color: var(--fg-4);
-      font-weight: 500;
-      align-self: flex-start;
-      border-radius: .5rem .5rem .5rem 2px;
-    }
-
-    .chat-bubble.ai-loading {
-      background: var(--bg-2);
+    .fc-alert-bars {
       display: flex;
-      gap: 3px;
+      flex-direction: column;
+      gap: 4px;
+      width: 102px;
+    }
+
+    .fc-alert-bar {
+      height: 8px;
+      background: #e4e4e7;
+      border-radius: 4px;
+      width: 100%;
+    }
+
+    .fc-alert-bar--short { width: 90px; }
+
+    /* Action cards — Card 2 (Figma 6068:12086) */
+    .fc-action-card {
+      position: absolute;
+      background: white;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.06);
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+
+    .fc-action-row {
+      display: flex;
+      gap: 6px;
       align-items: center;
-      padding: .5rem .7rem;
-      align-self: flex-start;
-      border-radius: .5rem .5rem .5rem 2px;
     }
 
-    .chat-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--fg-2);
-      animation: chatPulse 1.2s ease-in-out infinite;
+    .fc-action-label {
+      font-family: var(--font-geist);
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 18px;
+      color: #09090b;
+      white-space: nowrap;
     }
 
-    .chat-dot:nth-child(2) {
-      animation-delay: .2s;
+    /* Sparkle icon — 20×20px composed of 5 SVG parts */
+    .fc-sparkle {
+      position: relative;
+      width: 20px;
+      height: 20px;
+      overflow: hidden;
+      flex-shrink: 0;
     }
 
-    .chat-dot:nth-child(3) {
-      animation-delay: .4s;
+    .fc-sparkle-part {
+      position: absolute;
     }
 
-    @keyframes chatPulse {
+    .fc-sparkle-part img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      max-width: none;
+    }
 
-      0%,
-      80%,
-      100% {
-        opacity: .3;
-        transform: scale(.8);
-      }
+    /* Chat panel — Card 3 (Figma 6060:11352) */
+    .fc-chat-panel {
+      position: absolute;
+      left: 36.17px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 309px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 0 1px;
+    }
 
-      40% {
-        opacity: 1;
-        transform: scale(1);
-      }
+    .fc-chat-end {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      width: 100%;
+    }
+
+    .fc-chat-start {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    .fc-bubble-user {
+      background: #18181b;
+      color: white;
+      padding: 14px;
+      border-radius: 9.806px 9.806px 2.451px 9.806px;
+      font-family: var(--font-inter);
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 19.305px;
+      letter-spacing: -0.2942px;
+      white-space: nowrap;
+    }
+
+    .fc-bubble-ai {
+      background: #f5f5f5;
+      color: #18181b;
+      padding: 14px;
+      border-radius: 9.806px 9.806px 9.806px 2.451px;
+      width: 251px;
+      height: 86px;
+      font-family: var(--font-inter);
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 19.305px;
+      letter-spacing: -0.2942px;
+      display: flex;
+      align-items: center;
+    }
+
+    .fc-bubble-ai p { width: 223px; }
+
+    .fc-bubble-loading {
+      background: #f5f5f5;
+      border-radius: 9.806px;
+      padding: 17px 14px;
+      display: flex;
+      align-items: center;
+    }
+
+    .fc-loading-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 10px;
+      background: #999;
+      animation: fcDotPulse 1.4s ease-in-out infinite;
+    }
+
+    .fc-loading-dot:nth-child(2) { animation-delay: 0.2s; }
+    .fc-loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes fcDotPulse {
+      0%, 60%, 100% { opacity: 0.3; transform: scale(0.8); }
+      30% { opacity: 1; transform: scale(1); }
     }
 
     /* ============================================================
        HOW IT WORKS — Figma gradient card style
     ============================================================ */
     .how-section {
-      padding: 7rem 0;
+      padding: 75px 0;
       background: var(--bg-1);
     }
 
@@ -1315,7 +1393,8 @@
     }
 
     .step {
-      background: var(--card-bg);
+      background: transparent;
+      border: 1px solid var(--gray-2);
       border-radius: var(--radius-4xl);
       overflow: hidden;
       display: flex;
@@ -1329,7 +1408,7 @@
       justify-content: center;
       position: relative;
       overflow: hidden;
-      background: var(--step-gradient);
+      background: transparent;
     }
 
     .step-blobs {
@@ -1416,34 +1495,111 @@
       80–100% Google centre / Outlook right   — hold (= start, loops cleanly)
     */
     @keyframes calGoogleSlide {
-      0%   { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
-      20%  { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
-      40%  { transform: translateX(-70px) scale(0.8); filter: blur(20px); opacity: 0.5;  }
-      60%  { transform: translateX(-70px) scale(0.8); filter: blur(20px); opacity: 0.5;  }
-      80%  { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
-      100% { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
+      0% {
+        transform: translateX(0) scale(1);
+        filter: blur(0px);
+        opacity: 1;
+      }
+
+      20% {
+        transform: translateX(0) scale(1);
+        filter: blur(0px);
+        opacity: 1;
+      }
+
+      40% {
+        transform: translateX(-70px) scale(0.8);
+        filter: blur(20px);
+        opacity: 0.5;
+      }
+
+      60% {
+        transform: translateX(-70px) scale(0.8);
+        filter: blur(20px);
+        opacity: 0.5;
+      }
+
+      80% {
+        transform: translateX(0) scale(1);
+        filter: blur(0px);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateX(0) scale(1);
+        filter: blur(0px);
+        opacity: 1;
+      }
     }
 
     @keyframes calOutlookSlide {
-      0%   { transform: translateX(70px)  scale(0.8); filter: blur(20px); opacity: 0.65; }
-      20%  { transform: translateX(70px)  scale(0.8); filter: blur(20px); opacity: 0.65; }
-      40%  { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
-      60%  { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
-      80%  { transform: translateX(70px)  scale(0.8); filter: blur(20px); opacity: 0.65; }
-      100% { transform: translateX(70px)  scale(0.8); filter: blur(20px); opacity: 0.65; }
+      0% {
+        transform: translateX(70px) scale(0.8);
+        filter: blur(20px);
+        opacity: 0.65;
+      }
+
+      20% {
+        transform: translateX(70px) scale(0.8);
+        filter: blur(20px);
+        opacity: 0.65;
+      }
+
+      40% {
+        transform: translateX(0) scale(1);
+        filter: blur(0px);
+        opacity: 1;
+      }
+
+      60% {
+        transform: translateX(0) scale(1);
+        filter: blur(0px);
+        opacity: 1;
+      }
+
+      80% {
+        transform: translateX(70px) scale(0.8);
+        filter: blur(20px);
+        opacity: 0.65;
+      }
+
+      100% {
+        transform: translateX(70px) scale(0.8);
+        filter: blur(20px);
+        opacity: 0.65;
+      }
     }
 
-    .cal-icon--google  { animation: calGoogleSlide  3.5s linear infinite; }
-    .cal-icon--outlook { animation: calOutlookSlide 3.5s linear infinite; }
+    .cal-icon--google {
+      animation: calGoogleSlide 3.5s linear infinite;
+    }
+
+    .cal-icon--outlook {
+      animation: calOutlookSlide 3.5s linear infinite;
+    }
 
     @media (prefers-reduced-motion: reduce) {
-      .cal-icon--google, .cal-icon--outlook { animation: none; }
-      .cal-icon--google  { transform: translateX(0)    scale(1);   filter: blur(0px);  opacity: 1;    }
-      .cal-icon--outlook { transform: translateX(70px) scale(0.8); filter: blur(20px); opacity: 0.65; }
+
+      .cal-icon--google,
+      .cal-icon--outlook {
+        animation: none;
+      }
+
+      .cal-icon--google {
+        transform: translateX(0) scale(1);
+        filter: blur(0px);
+        opacity: 1;
+      }
+
+      .cal-icon--outlook {
+        transform: translateX(70px) scale(0.8);
+        filter: blur(20px);
+        opacity: 0.65;
+      }
     }
 
     .step-body {
-      padding: 3.125rem 2.5rem;
+      padding: 0 2.5rem 2rem 2.5rem;
       display: flex;
       flex-direction: column;
       gap: .625rem;
@@ -1481,32 +1637,108 @@
       → at t=0: Teams=left, Zoom=centre, Meet=right (matches Figma)
     */
     @keyframes meetCarousel {
-      0%      { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
-      15%     { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
-      25%     { transform: translateX(-70px) scale(0.8); filter: blur(20px); opacity: 0.5;  }
-      40%     { transform: translateX(-70px) scale(0.8); filter: blur(20px); opacity: 0.5;  }
-      40.5%   { transform: translateX(70px)  scale(0.8); filter: blur(20px); opacity: 0;    }
-      60%     { transform: translateX(70px)  scale(0.8); filter: blur(20px); opacity: 0;    }
-      75%     { transform: translateX(70px)  scale(0.8); filter: blur(20px); opacity: 0.65; }
-      90%     { transform: translateX(70px)  scale(0.8); filter: blur(20px); opacity: 0.65; }
-      100%    { transform: translateX(0)     scale(1);   filter: blur(0px);  opacity: 1;    }
+      0% {
+        transform: translateX(0) scale(1);
+        filter: blur(0px);
+        opacity: 1;
+      }
+
+      15% {
+        transform: translateX(0) scale(1);
+        filter: blur(0px);
+        opacity: 1;
+      }
+
+      25% {
+        transform: translateX(-70px) scale(0.8);
+        filter: blur(20px);
+        opacity: 0.5;
+      }
+
+      40% {
+        transform: translateX(-70px) scale(0.8);
+        filter: blur(20px);
+        opacity: 0.5;
+      }
+
+      40.5% {
+        transform: translateX(70px) scale(0.8);
+        filter: blur(20px);
+        opacity: 0;
+      }
+
+      60% {
+        transform: translateX(70px) scale(0.8);
+        filter: blur(20px);
+        opacity: 0;
+      }
+
+      75% {
+        transform: translateX(70px) scale(0.8);
+        filter: blur(20px);
+        opacity: 0.65;
+      }
+
+      90% {
+        transform: translateX(70px) scale(0.8);
+        filter: blur(20px);
+        opacity: 0.65;
+      }
+
+      100% {
+        transform: translateX(0) scale(1);
+        filter: blur(0px);
+        opacity: 1;
+      }
     }
 
-    .meet-icon { animation: meetCarousel 5s linear infinite; }
-    .meet-icon--zoom  { animation-delay:     0s; }
-    .meet-icon--teams { animation-delay: -1.25s; }
-    .meet-icon--webex { animation-delay:  -2.5s; }
-    .meet-icon--meet  { animation-delay: -3.75s; }
+    .meet-icon {
+      animation: meetCarousel 5s linear infinite;
+    }
+
+    .meet-icon--zoom {
+      animation-delay: 0s;
+    }
+
+    .meet-icon--teams {
+      animation-delay: -1.25s;
+    }
+
+    .meet-icon--webex {
+      animation-delay: -2.5s;
+    }
+
+    .meet-icon--meet {
+      animation-delay: -3.75s;
+    }
 
     @media (prefers-reduced-motion: reduce) {
-      .meet-icon { animation: none; opacity: 0; }
-      .meet-icon--zoom  { opacity: 1; transform: translateX(0)    scale(1);   filter: blur(0);   }
-      .meet-icon--teams { opacity: 0.5; transform: translateX(-70px) scale(0.8); filter: blur(20px); }
-      .meet-icon--meet  { opacity: 0.65; transform: translateX(70px)  scale(0.8); filter: blur(20px); }
+      .meet-icon {
+        animation: none;
+        opacity: 0;
+      }
+
+      .meet-icon--zoom {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+        filter: blur(0);
+      }
+
+      .meet-icon--teams {
+        opacity: 0.5;
+        transform: translateX(-70px) scale(0.8);
+        filter: blur(20px);
+      }
+
+      .meet-icon--meet {
+        opacity: 0.65;
+        transform: translateX(70px) scale(0.8);
+        filter: blur(20px);
+      }
     }
 
     .step-title-text {
-      font-size: var(--text-lg);
+      font-size: 24px;
       font-weight: var(--font-weight-semibold);
       color: var(--fg-4);
       line-height: 1.55;
@@ -1525,7 +1757,7 @@
        PRICING — Figma light cards
     ============================================================ */
     .pricing-section {
-      padding: 7rem 0;
+      padding: 75px 0;
       background: var(--bg-1);
     }
 
@@ -1603,8 +1835,9 @@
     }
 
     .pricing-card {
-      background: var(--card-bg);
-      border-radius: 1.5rem;
+      background: transparent;
+      border: 1px solid var(--gray-2);
+      border-radius: var(--radius-4xl);
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -1615,6 +1848,7 @@
       display: flex;
       flex-direction: column;
       gap: .25rem;
+      border-bottom: 1px solid var(--gray-2);
     }
 
     .pc-plan {
@@ -1677,7 +1911,7 @@
        FAQ
     ============================================================ */
     .faq-section {
-      padding: 7rem 0;
+      padding: 75px 0;
       background: var(--bg-1);
     }
 
@@ -1737,7 +1971,7 @@
        CTA SECTION
     ============================================================ */
     .cta-section {
-      padding: 7rem 0 7.1rem;
+      padding: 75px 0;
       background: var(--bg-1);
       text-align: center;
     }
@@ -2066,9 +2300,22 @@
   ================================================================ -->
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="container nav-inner">
-      <a href="/" class="nav-logo" aria-label="Meeting AI home">
-        <span class="nav-logo-dot" aria-hidden="true"></span>
-        Meeting AI
+      <a href="/" class="nav-logo" aria-label="BrainLucid home">
+        <svg viewBox="0 0 145.337 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M16.197 0.830554C18.593 -0.732154 22.6994 -0.220148 25.8021 3.48731C27.8146 5.89284 29.528 11.401 25.8021 13.6622C25.5797 13.7971 25.3403 13.9092 25.0947 14.0123C25.3403 14.1154 25.5776 14.2295 25.8 14.3644C29.5274 16.6256 27.8129 22.1361 25.8 24.5413C22.6971 28.2483 18.5064 28.6991 16.197 27.1941L15.8632 26.96C14.7707 26.1363 14.2044 25.0936 13.9997 23.9851C13.7751 25.2011 13.1156 26.3386 11.8045 27.1941L11.3976 27.4201C9.22989 28.4632 5.10903 28.0154 2.19947 24.5393C0.186727 22.1338 -1.52765 16.6235 2.19947 14.3624C2.42059 14.2284 2.65664 14.115 2.9006 14.0123C2.65626 13.9095 2.41882 13.7965 2.19739 13.6622C-1.52901 11.4007 0.186686 5.89037 2.19947 3.48531C5.30242 -0.221273 9.50291 -0.668724 11.8025 0.832555L12.1363 1.06662C13.2288 1.89166 13.7934 2.93615 13.9977 4.04547C14.2017 2.93561 14.77 1.89174 15.8632 1.06662L16.197 0.830554ZM24.573 16.0449C23.854 15.6089 22.8831 15.4174 21.7581 15.7208C20.6175 16.0289 19.1436 16.9 17.6431 18.8797L17.6243 18.9037L17.6035 18.9297C16.8737 19.8357 16.212 21.2288 16.1031 22.5567C16.0007 23.8101 16.3796 24.8334 17.4804 25.5516C18.5814 26.2696 21.4903 26.4364 24.0827 23.339C24.8349 22.4399 25.6099 20.8228 25.7833 19.2398C25.9552 17.6683 25.5146 16.6161 24.573 16.0449ZM6.23932 15.7188C5.11477 15.4157 4.14535 15.6071 3.42645 16.0429C2.48525 16.6139 2.04486 17.6653 2.21617 19.2358C2.38928 20.819 3.16458 22.4376 3.91683 23.337C6.45842 26.3739 9.6481 26.1171 10.5171 25.5516C11.6188 24.8329 11.9969 23.8088 11.8943 22.5547C11.799 21.3927 11.2822 20.1813 10.6652 19.2898L10.396 18.9257L10.3564 18.8777C8.85526 16.8975 7.38001 16.0264 6.23932 15.7188ZM13.9977 6.10406C13.7482 7.68665 12.9884 9.21656 12.1384 10.2712C10.6404 12.2476 9.02792 13.4304 7.48091 14.0123C9.02832 14.5939 10.6399 15.7783 12.1384 17.7554C12.9852 18.806 13.7472 20.328 13.9997 21.9046C14.2525 20.3283 15.0144 18.8059 15.8611 17.7554C17.3589 15.7794 18.9697 14.5942 20.5165 14.0123C18.9701 13.4303 17.3586 12.2469 15.8611 10.2712C15.0111 9.21662 14.2472 7.68665 13.9977 6.10406ZM24.0827 4.68765C21.4741 1.57096 18.652 1.71168 17.4824 2.47502C16.3812 3.19426 16.0028 4.21849 16.1052 5.47188C16.2005 6.63366 16.7174 7.84551 17.3343 8.7368L17.6056 9.09891L17.6431 9.14692C19.1445 11.1279 20.6193 12.0001 21.7602 12.3078C22.8851 12.6112 23.8561 12.4197 24.5751 11.9837C25.5164 11.4126 25.9549 10.3598 25.7833 8.78882C25.6101 7.20521 24.8351 5.5868 24.0827 4.68765ZM10.5171 2.47502C9.42547 1.76202 6.50862 1.59142 3.91683 4.68765C3.16454 5.58687 2.3894 7.20555 2.21617 8.78882C2.04459 10.3599 2.48507 11.4106 3.42645 11.9817C4.14538 12.4175 5.11474 12.609 6.23932 12.3058C7.37999 11.9979 8.85558 11.127 10.3564 9.14692L10.3752 9.12292L10.396 9.09891C11.1258 8.19308 11.7856 6.79965 11.8943 5.47188C11.9967 4.21874 11.6181 3.1948 10.5171 2.47502Z" fill="#09090B"/>
+            <path d="M138.149 22.896C136.485 22.896 135.105 22.296 134.009 21.096C132.921 19.888 132.377 18.312 132.377 16.368C132.377 14.432 132.933 12.852 134.045 11.628C135.157 10.404 136.565 9.792 138.269 9.792C139.093 9.792 139.853 9.972 140.549 10.332C141.245 10.684 141.769 11.148 142.121 11.724H142.181V5.316H145.337V22.5H142.301V20.412L142.613 20.868L142.229 20.88C141.853 21.496 141.297 21.988 140.561 22.356C139.833 22.716 139.029 22.896 138.149 22.896ZM138.869 20.208C139.837 20.208 140.645 19.844 141.293 19.116C141.949 18.388 142.277 17.464 142.277 16.344C142.277 15.208 141.945 14.284 141.281 13.572C140.625 12.86 139.821 12.504 138.869 12.504C137.917 12.504 137.109 12.86 136.445 13.572C135.789 14.284 135.461 15.208 135.461 16.344C135.461 17.472 135.789 18.4 136.445 19.128C137.101 19.848 137.909 20.208 138.869 20.208Z" fill="#09090B"/>
+            <path d="M127.609 22.5V10.176H130.789V22.5H127.609ZM129.205 8.088C128.685 8.088 128.241 7.908 127.873 7.548C127.513 7.188 127.333 6.748 127.333 6.228C127.333 5.7 127.513 5.264 127.873 4.92C128.241 4.568 128.685 4.392 129.205 4.392C129.733 4.392 130.173 4.568 130.525 4.92C130.877 5.264 131.053 5.7 131.053 6.228C131.053 6.748 130.877 7.188 130.525 7.548C130.173 7.908 129.733 8.088 129.205 8.088Z" fill="#09090B"/>
+            <path d="M120.445 22.896C118.565 22.896 117.017 22.28 115.801 21.048C114.593 19.816 113.989 18.24 113.989 16.32C113.989 14.392 114.597 12.82 115.813 11.604C117.029 10.388 118.577 9.78 120.457 9.78C121.305 9.78 122.073 9.9 122.761 10.14C123.457 10.38 124.089 10.756 124.657 11.268C125.225 11.772 125.717 12.496 126.133 13.44L123.469 14.496C123.205 13.96 122.937 13.556 122.665 13.284C122.393 13.012 122.073 12.812 121.705 12.684C121.337 12.556 120.933 12.492 120.493 12.492C119.557 12.492 118.753 12.844 118.081 13.548C117.409 14.252 117.073 15.172 117.073 16.308C117.073 17.444 117.405 18.376 118.069 19.104C118.733 19.824 119.537 20.184 120.481 20.184C120.921 20.184 121.329 20.116 121.705 19.98C122.089 19.836 122.413 19.644 122.677 19.404C122.941 19.156 123.233 18.74 123.553 18.156L126.217 19.092C125.785 20.092 125.297 20.844 124.753 21.348C124.217 21.844 123.585 22.228 122.857 22.5C122.137 22.764 121.333 22.896 120.445 22.896Z" fill="#09090B"/>
+            <path d="M105.467 22.896C104.027 22.896 102.903 22.484 102.095 21.66C101.295 20.828 100.895 19.656 100.895 18.144V10.176H104.075V17.628C104.075 18.524 104.283 19.212 104.699 19.692C105.115 20.172 105.707 20.412 106.475 20.412C107.291 20.412 107.971 20.104 108.515 19.488C109.059 18.872 109.331 18.12 109.331 17.232V10.176H112.511V22.5H109.511V19.368L110.963 20.82H109.439C109.087 21.428 108.555 21.928 107.843 22.32C107.139 22.704 106.347 22.896 105.467 22.896Z" fill="#09090B"/>
+            <path d="M89.3562 22.5V5.316H92.5723V19.488H99.9523V22.5H89.3562Z" fill="#09090B"/>
+            <path d="M75.3262 22.5V10.176H78.3622V12.42L78.0142 11.976H78.4462C78.8302 11.312 79.3942 10.78 80.1382 10.38C80.8902 9.98 81.6702 9.78 82.4782 9.78C83.8702 9.78 84.9622 10.2 85.7542 11.04C86.5462 11.872 86.9422 13.008 86.9422 14.448V22.5H83.7622V15.132C83.7622 14.252 83.5502 13.584 83.1262 13.128C82.7102 12.672 82.0902 12.444 81.2662 12.444C80.4742 12.444 79.8142 12.748 79.2862 13.356C78.7662 13.964 78.5062 14.704 78.5062 15.576V22.5H75.3262Z" fill="#09090B"/>
+            <path d="M69.8266 22.5V10.176H73.0066V22.5H69.8266ZM71.4226 8.088C70.9026 8.088 70.4586 7.908 70.0906 7.548C69.7306 7.188 69.5506 6.748 69.5506 6.228C69.5506 5.7 69.7306 5.264 70.0906 4.92C70.4586 4.568 70.9026 4.392 71.4226 4.392C71.9506 4.392 72.3906 4.568 72.7426 4.92C73.0946 5.264 73.2706 5.7 73.2706 6.228C73.2706 6.748 73.0946 7.188 72.7426 7.548C72.3906 7.908 71.9506 8.088 71.4226 8.088Z" fill="#09090B"/>
+            <path d="M60.5294 22.896C59.1774 22.896 58.0854 22.524 57.2534 21.78C56.4294 21.036 56.0174 20.064 56.0174 18.864C56.0174 17.608 56.5014 16.612 57.4694 15.876C58.4454 15.132 59.7094 14.76 61.2614 14.76C61.9014 14.76 62.5134 14.828 63.0974 14.964C63.6814 15.092 64.1734 15.256 64.5734 15.456V14.724C64.5734 13.956 64.3054 13.344 63.7694 12.888C63.2334 12.432 62.5254 12.204 61.6454 12.204C61.1334 12.204 60.6974 12.26 60.3374 12.372C59.9854 12.484 59.6574 12.632 59.3534 12.816C59.0574 12.992 58.7894 13.196 58.5494 13.428C58.3094 13.652 58.1894 13.764 58.1894 13.764L56.4374 12.06C56.4374 12.06 56.6294 11.892 57.0134 11.556C57.4054 11.212 57.8374 10.908 58.3094 10.644C58.7814 10.372 59.3094 10.16 59.8934 10.008C60.4854 9.856 61.1614 9.78 61.9214 9.78C63.7134 9.78 65.1094 10.216 66.1094 11.088C67.1174 11.952 67.6214 13.172 67.6214 14.748V22.5H64.5854V19.788L65.3774 20.892H64.5014C64.1334 21.484 63.5974 21.968 62.8934 22.344C62.1894 22.712 61.4014 22.896 60.5294 22.896ZM61.3574 20.676C62.2774 20.676 63.0414 20.352 63.6494 19.704C64.2574 19.048 64.5654 18.212 64.5734 17.196V17.184C64.2294 16.984 63.8254 16.824 63.3614 16.704C62.8974 16.576 62.4014 16.512 61.8734 16.512C61.0174 16.512 60.3254 16.692 59.7974 17.052C59.2774 17.412 59.0174 17.956 59.0174 18.684C59.0174 19.3 59.2334 19.788 59.6654 20.148C60.0974 20.5 60.6614 20.676 61.3574 20.676Z" fill="#09090B"/>
+            <path d="M47.9784 22.5V10.176H51.0144V12.492L50.6544 12.096H51.0864C51.3264 11.424 51.7704 10.872 52.4184 10.44C53.0664 10 53.7544 9.78 54.4824 9.78C54.6984 9.78 54.9184 9.8 55.1424 9.84C55.3744 9.872 55.5824 9.92 55.7664 9.984C55.9504 10.04 56.0424 10.068 56.0424 10.068V13.104C56.0424 13.104 55.9184 13.064 55.6704 12.984C55.4304 12.896 55.1664 12.824 54.8784 12.768C54.5984 12.712 54.3424 12.684 54.1104 12.684C53.2624 12.684 52.5584 12.996 51.9984 13.62C51.4384 14.244 51.1584 15.04 51.1584 16.008V22.5H47.9784Z" fill="#09090B"/>
+            <path d="M33.8 22.5V5.316H40.796C42.212 5.316 43.404 5.748 44.372 6.612C45.34 7.468 45.824 8.544 45.824 9.84C45.824 10.728 45.604 11.492 45.164 12.132C44.724 12.772 44.132 13.256 43.388 13.584V13.656C44.292 13.928 45.024 14.42 45.584 15.132C46.144 15.836 46.424 16.668 46.424 17.628C46.424 19.004 45.924 20.16 44.924 21.096C43.932 22.032 42.688 22.5 41.192 22.5H33.8ZM37.016 19.836H40.664C41.368 19.836 41.964 19.6 42.452 19.128C42.94 18.648 43.184 18.06 43.184 17.364C43.184 16.668 42.928 16.092 42.416 15.636C41.912 15.18 41.3 14.952 40.58 14.952H36.068V12.576H40.28C40.976 12.576 41.552 12.356 42.008 11.916C42.472 11.468 42.704 10.928 42.704 10.296C42.704 9.664 42.48 9.132 42.032 8.7C41.584 8.26 41.02 8.04 40.34 8.04H37.016V19.836Z" fill="#09090B"/>
+          </g>
+        </svg>
       </a>
       <ul class="nav-links" role="list">
         <li><a href="#features">Features</a></li>
@@ -2141,48 +2388,36 @@
                 <div class="dash-signals">
                   <div id="content-slot">
 
-                    <!-- State 1: Someone's talking... (visible at t=0) -->
-                    <div id="state-talking" class="content-state">
-                      <div class="status-row">
-                        <div class="soundbar" id="soundbar-bars">
-                          <div class="sb-bar"></div>
-                          <div class="sb-bar"></div>
-                          <div class="sb-bar"></div>
-                          <div class="sb-bar"></div>
-                          <div class="sb-bar"></div>
-                          <div class="sb-bar"></div>
-                          <div class="sb-bar"></div>
-                          <div class="sb-bar"></div>
-                          <div class="sb-bar"></div>
+                    <!-- State 1: Progressive status transitions (Listening → Understanding context → Generating response) -->
+                    <div id="state-listening" class="content-state">
+                      <div class="status-center">
+                        <!-- Soundbar in isolated wrapper — GSAP height changes never displace text -->
+                        <div class="sb-wrapper">
+                          <div class="soundbar" id="soundbar-bars">
+                            <div class="sb-bar"></div>
+                            <div class="sb-bar"></div>
+                            <div class="sb-bar"></div>
+                            <div class="sb-bar"></div>
+                            <div class="sb-bar"></div>
+                            <div class="sb-bar"></div>
+                            <div class="sb-bar"></div>
+                            <div class="sb-bar"></div>
+                            <div class="sb-bar"></div>
+                          </div>
                         </div>
-                        <p class="talking-text"><span class="shimmer-text">Someone's talking</span><span class="typing-dot">.</span><span class="typing-dot">.</span><span class="typing-dot">.</span></p>
+                        <!-- Status text in its own wrapper — fixed height, never shifts -->
+                        <div class="sb-label-wrapper">
+                          <p class="status-label">
+                            <span class="shimmer-text" id="status-text">Listening</span>
+                          </p>
+                        </div>
                       </div>
                     </div>
 
-                    <!-- State 2: Reasoning... (hidden until t=6s) -->
-                    <div id="state-reasoning" class="content-state" style="display:none;">
-                      <div class="status-row">
-                        <p class="talking-text"><span class="shimmer-text">Reasoning</span><span class="typing-dot">.</span><span class="typing-dot">.</span><span class="typing-dot">.</span></p>
-                      </div>
-                    </div>
-
-                    <!-- State 3: AI response (hidden until t=7s, streams in element-by-element) -->
+                    <!-- State 2: AI response — badge above, typewriter writes into content div -->
                     <div id="state-ai" class="content-state" style="display:none;">
-                      <!-- Summary: badge inline + text (Figma 5870-14982) -->
-                      <div class="ai-response-summary" data-stream>
-                        <span class="signal-badge badge-risk" style="flex-shrink:0;">Risk</span>
-                        <p class="ai-response-text">No clear owner has been assigned for the infrastructure migration initiative. Without explicit accountability, this critical path item is at high risk of slipping past the Q3 deadline — potentially blocking dependent workstreams including the platform launch and data pipeline cutover. This gap emerged during the meeting with no volunteer or assignment surfacing from the discussion.</p>
-                      </div>
-                      <!-- Say this: bold title + paragraph + numbered list (Figma 5870-14985) -->
-                      <div class="ai-response-say">
-                        <p class="ai-say-title" data-stream>You can say this:</p>
-                        <p class="ai-say-body" data-stream>Before we close out this agenda item, it is worth pausing to address the ownership gap directly. Unassigned initiatives at this stage of the quarter rarely resolve themselves, and the infrastructure migration sits on the critical path for at least three downstream workstreams. Here is a structured approach to resolving this before the meeting ends:</p>
-                        <ol class="ai-say-list">
-                          <li data-stream>Identify a willing owner from the team present — ideally someone with infrastructure context who has capacity before end of Q3. If no one volunteers, escalate to the engineering lead before end of day.</li>
-                          <li data-stream>Define a lightweight accountability structure: a weekly check-in, a single status document, and a clear definition of done for the migration milestone so progress is visible to stakeholders.</li>
-                          <li data-stream>Set a decision checkpoint — if the migration is not on track by the end of week two of Q3, trigger an immediate escalation to the steering committee with options to scope down or extend the timeline.</li>
-                        </ol>
-                      </div>
+                      <span class="signal-badge badge-risk ai-badge">Risk</span>
+                      <div id="ai-response-content"></div>
                     </div>
 
                   </div>
@@ -2198,16 +2433,18 @@
                 <button class="dash-action-btn">Generate a question</button>
                 <button class="dash-action-btn">What needs alignment?</button>
               </div>
-              <div class="dash-chat" tabindex="0" role="textbox" aria-label="Ask something about this meeting..." aria-readonly="true">
+              <div class="dash-chat" tabindex="0" role="textbox" aria-label="Ask something about this meeting..."
+                aria-readonly="true">
                 <div class="dash-chat-plus">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-                    <path d="M12 5v14M5 12h14" stroke="#18181b" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 5v14M5 12h14" stroke="#18181b" stroke-width="2" stroke-linecap="round" />
                   </svg>
                 </div>
                 <p class="dash-chat-placeholder">Ask something about this meeting...</p>
                 <div class="dash-chat-send">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-                    <path d="M12 19V5M5 12l7-7 7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 19V5M5 12l7-7 7 7" stroke="white" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
                   </svg>
                 </div>
               </div>
@@ -2224,21 +2461,22 @@
           <!-- Top video — has audio, mute/unmute button shown -->
           <div class="pcard-slot pcard-slot-top">
             <video class="pcard-video" id="pcard-video-top"
-              src="Professional_Woman_Video_A_man_with_short_brown_hair_wearing_a_blue_shirt_lVJ_IYYs.mp4"
-              autoplay loop muted playsinline></video>
-            <button class="pcard-mute-btn" id="pcard-mute-btn"
-              aria-label="Unmute" onclick="pcardToggleMute()">
+              src="Professional_Woman_Video_A_man_with_short_brown_hair_wearing_a_blue_shirt_lVJ_IYYs.mp4" autoplay loop
+              muted playsinline></video>
+            <button class="pcard-mute-btn" id="pcard-mute-btn" aria-label="Unmute" onclick="pcardToggleMute()">
               <!-- volume-x icon (muted state) -->
-              <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                <line x1="23" y1="9" x2="17" y2="15"/>
-                <line x1="17" y1="9" x2="23" y2="15"/>
+              <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <line x1="23" y1="9" x2="17" y2="15" />
+                <line x1="17" y1="9" x2="23" y2="15" />
               </svg>
               <!-- volume-2 icon (unmuted state, hidden by default) -->
-              <svg class="icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              <svg class="icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
               </svg>
             </button>
           </div>
@@ -2246,8 +2484,8 @@
           <!-- Bottom video — no audio, no mute button -->
           <div class="pcard-slot pcard-slot-bottom">
             <video class="pcard-video"
-              src="Hyper-Realistic_Video_A_man_stands_in_front_of_a_blurred_background_as_3x5D5kGs.mp4"
-              autoplay loop muted playsinline></video>
+              src="Hyper-Realistic_Video_A_man_stands_in_front_of_a_blurred_background_as_3x5D5kGs.mp4" autoplay loop
+              muted playsinline></video>
           </div>
 
         </div>
@@ -2268,87 +2506,163 @@
 
         <div class="feature-grid">
 
-          <!-- Card 1: Signals -->
+          <!-- Card 1: Spots areas of concern — Figma 6035:8190 / 6062:11765 -->
           <div class="feature-item">
             <div class="fc-card" aria-hidden="true">
-              <div class="fc-inner">
-                <div class="signal-row">
-                  <span class="signal-dot" style="background:#dc2626;"></span>
-                  <div>
-                    <p class="signal-title">Risk detected</p>
-                    <p class="signal-sub">Timeline may slip — no owner assigned yet</p>
+              <!-- Photo wrapper: left:-18.17px top:-22px 408×576px -->
+              <div style="position:absolute;left:-18.17px;top:-22px;width:408px;height:576px;">
+                <img src="images/feature-card-1.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;">
+              </div>
+              <!-- Alert stack: left:207.83px top:206px width:155px gap:14px -->
+              <div style="position:absolute;left:207.83px;top:206px;width:155px;display:flex;flex-direction:column;gap:14px;">
+                <div class="fc-alert-card">
+                  <div class="fc-alert-row">
+                    <div class="fc-alert-icon"><img src="images/fc1-icon-risk.svg" alt=""></div>
+                    <div class="fc-alert-content">
+                      <p class="fc-alert-title">Risk detected</p>
+                      <div class="fc-alert-bars">
+                        <div class="fc-alert-bar"></div>
+                        <div class="fc-alert-bar fc-alert-bar--short"></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="signal-row">
-                  <span class="signal-dot" style="background:#f97316;"></span>
-                  <div>
-                    <p class="signal-title">Alignment gap</p>
-                    <p class="signal-sub">Design and eng have different scope in mind</p>
+                <div class="fc-alert-card">
+                  <div class="fc-alert-row">
+                    <div class="fc-alert-icon"><img src="images/fc1-icon-align.svg" alt=""></div>
+                    <div class="fc-alert-content">
+                      <p class="fc-alert-title">Alignment gap</p>
+                      <div class="fc-alert-bars">
+                        <div class="fc-alert-bar"></div>
+                        <div class="fc-alert-bar fc-alert-bar--short"></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="signal-row">
-                  <span class="signal-dot" style="background:#2563eb;"></span>
-                  <div>
-                    <p class="signal-title">Decision forming</p>
-                    <p class="signal-sub">Team is leaning toward option B</p>
+                <div class="fc-alert-card">
+                  <div class="fc-alert-row">
+                    <div class="fc-alert-icon"><img src="images/fc1-icon-questions.svg" alt=""></div>
+                    <div class="fc-alert-content">
+                      <p class="fc-alert-title">Open questions</p>
+                      <div class="fc-alert-bars">
+                        <div class="fc-alert-bar"></div>
+                        <div class="fc-alert-bar fc-alert-bar--short"></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="fc-text">
               <p class="fc-title">Proactively spots areas of concern</p>
-              <p class="fc-body">Surfaces risks, alignment gaps, and decisions forming — so nothing important slips by
-                unnoticed.</p>
+              <p class="fc-body">Surfaces risks, alignment gaps, and decisions forming — so nothing important slips by unnoticed.</p>
             </div>
           </div>
 
-          <!-- Card 2: Quick actions -->
+          <!-- Card 2: Facilitate meetings — Figma 6067:11992 / 6068:12086 -->
           <div class="feature-item">
             <div class="fc-card" aria-hidden="true">
-              <div class="fc-inner">
-                <p class="ap-label">Quick actions</p>
-                <div class="ap-btn-row">
-                  <div class="ap-chip active">Frame it</div>
-                  <div class="ap-chip">Summarise</div>
-                  <div class="ap-chip">Question</div>
+              <!-- Photo wrapper: left:-105.5px top:-117px 531×749px -->
+              <div style="position:absolute;left:-105.5px;top:-117px;width:531px;height:749px;">
+                <img src="images/feature-card-2.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;">
+              </div>
+              <!-- Clip container: left:-47.67px top:-15px 473×580px -->
+              <div style="position:absolute;left:-47.67px;top:-15px;width:473px;height:580px;overflow:hidden;">
+                <!-- Summarize card: left:78px top:58px w:148px -->
+                <div class="fc-action-card" style="left:78px;top:58px;width:148px;">
+                  <div class="fc-action-row">
+                    <div class="fc-sparkle">
+                      <div class="fc-sparkle-part" style="inset:8.33%;"><img src="images/fc2-sparkle-main.svg" alt=""></div>
+                      <div class="fc-sparkle-part" style="top:8.33%;left:16.67%;right:75%;bottom:66.67%;"><img src="images/fc2-sparkle-med.svg" alt=""></div>
+                      <div class="fc-sparkle-part" style="top:66.67%;left:75%;right:16.67%;bottom:8.33%;"><img src="images/fc2-sparkle-med.svg" alt=""></div>
+                      <div class="fc-sparkle-part" style="top:16.67%;left:8.33%;right:66.67%;bottom:75%;"><img src="images/fc2-sparkle-tiny.svg" alt=""></div>
+                      <div class="fc-sparkle-part" style="top:75%;left:66.67%;right:8.33%;bottom:16.67%;"><img src="images/fc2-sparkle-tiny.svg" alt=""></div>
+                    </div>
+                    <p class="fc-action-label">Summarize</p>
+                  </div>
                 </div>
-                <div class="ap-suggestion">
-                  <p class="ap-suggestion-label">Suggested framing</p>
-                  <p class="ap-suggestion-text">"Let me make sure we're aligned on the goal before we discuss
-                    timelines..."</p>
+                <!-- Summarize connector: left:226.17px top:83px 25×27px -->
+                <div style="position:absolute;left:226.17px;top:83px;width:25px;height:27px;">
+                  <div style="position:absolute;inset:-1.85% -2%;"><img src="images/fc2-connector-summarize.svg" alt="" style="display:block;max-width:none;width:100%;height:100%;"></div>
                 </div>
-                <div class="ap-input">
-                  <span>Ask anything...</span>
-                  <span>↵</span>
+                <!-- Frame meeting bracket connector (rotated 90°): left:291px top:125px flex 70×57px — behind card -->
+                <div style="position:absolute;left:291px;top:125px;width:70px;height:57px;display:flex;align-items:center;justify-content:center;">
+                  <div style="transform:rotate(90deg);flex-shrink:0;">
+                    <div style="position:relative;width:57px;height:70px;">
+                      <div style="position:absolute;inset:-0.71% -0.88%;"><img src="images/fc2-connector-bracket.svg" alt="" style="display:block;max-width:none;width:100%;height:100%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Frame meeting card: left:261.17px top:110px w:156px — on top of bracket connector -->
+                <div class="fc-action-card" style="left:261.17px;top:110px;width:156px;">
+                  <div class="fc-action-row">
+                    <div class="fc-sparkle">
+                      <div class="fc-sparkle-part" style="inset:8.33%;"><img src="images/fc2-sparkle-main.svg" alt=""></div>
+                      <div class="fc-sparkle-part" style="top:8.33%;left:16.67%;right:75%;bottom:66.67%;"><img src="images/fc2-sparkle-med.svg" alt=""></div>
+                      <div class="fc-sparkle-part" style="top:66.67%;left:75%;right:16.67%;bottom:8.33%;"><img src="images/fc2-sparkle-med.svg" alt=""></div>
+                      <div class="fc-sparkle-part" style="top:16.67%;left:8.33%;right:66.67%;bottom:75%;"><img src="images/fc2-sparkle-tiny.svg" alt=""></div>
+                      <div class="fc-sparkle-part" style="top:75%;left:66.67%;right:8.33%;bottom:16.67%;"><img src="images/fc2-sparkle-tiny.svg" alt=""></div>
+                    </div>
+                    <p class="fc-action-label">Frame meeting</p>
+                  </div>
+                </div>
+                <!-- Generate connector: left:255.17px top:325px 40×0px — behind card -->
+                <div style="position:absolute;left:255.17px;top:325px;width:40px;height:0;">
+                  <div style="position:absolute;inset:-0.5px -1.25%;"><img src="images/fc2-connector-generate.svg" alt="" style="display:block;max-width:none;width:100%;height:100%;"></div>
+                </div>
+                <!-- Generate a question card: left:71.17px top:302px w:190px — on top of connector -->
+                <div class="fc-action-card" style="left:71.17px;top:302px;width:190px;">
+                  <div class="fc-action-row">
+                    <div class="fc-sparkle">
+                      <div class="fc-sparkle-part" style="inset:8.33%;"><img src="images/fc2-sparkle-main.svg" alt=""></div>
+                      <div class="fc-sparkle-part" style="top:8.33%;left:16.67%;right:75%;bottom:66.67%;"><img src="images/fc2-sparkle-med.svg" alt=""></div>
+                      <div class="fc-sparkle-part" style="top:66.67%;left:75%;right:16.67%;bottom:8.33%;"><img src="images/fc2-sparkle-med.svg" alt=""></div>
+                      <div class="fc-sparkle-part" style="top:16.67%;left:8.33%;right:66.67%;bottom:75%;"><img src="images/fc2-sparkle-tiny.svg" alt=""></div>
+                      <div class="fc-sparkle-part" style="top:75%;left:66.67%;right:8.33%;bottom:16.67%;"><img src="images/fc2-sparkle-tiny.svg" alt=""></div>
+                    </div>
+                    <p class="fc-action-label">Generate a question</p>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="fc-text">
               <p class="fc-title">Facilitate meetings better.</p>
-              <p class="fc-body">Helpful shortcuts to help facilitate meetings and ensure quick alignment — frame,
-                summarise, or generate the right question in one tap.</p>
+              <p class="fc-body">Helpful shortcuts to help facilitate meetings and ensure quick alignment — frame, summarise, or generate the right question in one tap.</p>
             </div>
           </div>
 
-          <!-- Card 3: Chat / context engine -->
+          <!-- Card 3: Context engine — Figma 6060:11350 / 6060:11352 -->
           <div class="feature-item">
             <div class="fc-card" aria-hidden="true">
-              <div class="chat-panel">
-                <div class="chat-bubble user">What did Sarah commit to?</div>
-                <div class="chat-bubble ai">Sarah committed to delivering the revised spec by Friday and getting legal
-                  sign-off.</div>
-                <div class="chat-bubble user">Any risks with that?</div>
-                <div class="chat-bubble ai-loading">
-                  <span class="chat-dot"></span>
-                  <span class="chat-dot"></span>
-                  <span class="chat-dot"></span>
+              <!-- Photo: blur on wrapper, left:-45.83px top:-49px 446×627px blur:8.9px -->
+              <div style="position:absolute;left:-45.83px;top:-49px;width:470px;height:627px;filter:blur(8.9px);pointer-events:none;">
+                <img src="images/feature-card-3.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+              </div>
+              <!-- 15% exposure reduction overlay -->
+              <div style="position:absolute;inset:0;background:rgba(0,0,0,0.15);pointer-events:none;"></div>
+              <!-- Chat panel: vertically centred, left:36.17px w:309px -->
+              <div class="fc-chat-panel">
+                <div class="fc-chat-end">
+                  <div class="fc-bubble-user">What did Sarah commit to?</div>
+                </div>
+                <div class="fc-chat-start">
+                  <div class="fc-bubble-ai"><p>Sarah committed to delivering the revised spec by Friday and getting legal sign-off.</p></div>
+                </div>
+                <div class="fc-chat-end">
+                  <div class="fc-bubble-user">Any risks with that?</div>
+                </div>
+                <div class="fc-chat-start">
+                  <div class="fc-bubble-loading" style="gap:4px;">
+                    <div class="fc-loading-dot"></div>
+                    <div class="fc-loading-dot"></div>
+                    <div class="fc-loading-dot"></div>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="fc-text">
               <p class="fc-title">Your context engine.</p>
-              <p class="fc-body">Ask anything mid-meeting. Get answers grounded in what's been said, the documents you
-                uploaded, and the context that matters right now.</p>
+              <p class="fc-body">Ask anything mid-meeting. Get answers grounded in what's been said, the documents you uploaded, and the context that matters right now.</p>
             </div>
           </div>
 
@@ -2373,11 +2687,50 @@
               <div class="cal-carousel">
                 <!-- Google Calendar — starts active/centre -->
                 <div class="cal-icon cal-icon--google">
-                  <svg width="72" height="72" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#gcal-clip)"><path d="M61.0525 18.9492H18.9473V61.0545H61.0525V18.9492Z" fill="white"/><path d="M61.0524 80.0013L79.9998 61.0539L70.5261 59.4375L61.0524 61.0539L59.3232 69.7194L61.0524 80.0013Z" fill="#EA4335"/><path d="M0 61.0539V73.6855C0 77.1749 2.82632 80.0013 6.31579 80.0013H18.9474L20.8928 70.5276L18.9474 61.0539L8.62475 59.4375L0 61.0539Z" fill="#188038"/><path d="M79.9998 18.9474V6.31579C79.9998 2.82632 77.1734 0 73.684 0H61.0524C59.8996 4.6987 59.3232 8.15659 59.3232 10.3737C59.3232 12.5907 59.8996 15.4486 61.0524 18.9474C65.2429 20.1473 68.4008 20.7473 70.5261 20.7473C72.6514 20.7473 75.8093 20.1473 79.9998 18.9474Z" fill="#1967D2"/><path d="M80.0001 18.9492H61.0527V61.0545H80.0001V18.9492Z" fill="#FBBC04"/><path d="M61.0525 61.0508H18.9473V79.9982H61.0525V61.0508Z" fill="#34A853"/><path d="M61.0526 0H6.31579C2.82632 0 0 2.82632 0 6.31579V61.0526H18.9474V18.9474H61.0526V0Z" fill="#4285F4"/><path d="M27.5841 51.6097C26.0104 50.5465 24.9209 48.9939 24.3262 46.9413L27.9788 45.436C28.3104 46.6992 28.8893 47.6781 29.7156 48.3729C30.5367 49.0676 31.5367 49.4097 32.7051 49.4097C33.8999 49.4097 34.9262 49.0465 35.7841 48.3202C36.642 47.5939 37.0735 46.6676 37.0735 45.5465C37.0735 44.3992 36.6209 43.4623 35.7156 42.736C34.8104 42.0097 33.6735 41.6465 32.3156 41.6465H30.2051V38.0308H32.0999C33.2683 38.0308 34.2525 37.715 35.0525 37.0834C35.8525 36.4518 36.2525 35.5887 36.2525 34.4887C36.2525 33.5097 35.8946 32.7308 35.1788 32.1465C34.463 31.5623 33.5578 31.2676 32.4578 31.2676C31.3841 31.2676 30.5314 31.5518 29.8999 32.1255C29.2687 32.7007 28.7942 33.427 28.5209 34.236L24.9051 32.7308C25.3841 31.3729 26.263 30.1729 27.5525 29.136C28.842 28.0992 30.4893 27.5781 32.4893 27.5781C33.9683 27.5781 35.2999 27.8623 36.4788 28.436C37.6578 29.0097 38.5841 29.8044 39.2525 30.815C39.9209 31.8308 40.2525 32.9676 40.2525 34.2308C40.2525 35.5202 39.942 36.6097 39.3209 37.5044C38.6999 38.3992 37.9367 39.0834 37.0314 39.5623V39.7781C38.2003 40.26 39.2157 41.0516 39.9683 42.0676C40.7314 43.0939 41.1156 44.3202 41.1156 45.7518C41.1156 47.1834 40.7525 48.4623 40.0262 49.5834C39.2999 50.7044 38.2946 51.5887 37.0209 52.2308C35.742 52.8729 34.3051 53.1992 32.7104 53.1992C30.863 53.2044 29.1578 52.6729 27.5841 51.6097ZM50.0209 33.4834L46.0104 36.3834L44.0051 33.3413L51.1999 28.1518H53.9578V52.6308H50.0209V33.4834Z" fill="#4285F4"/></g><defs><clipPath id="gcal-clip"><rect width="80" height="80" fill="white"/></clipPath></defs></svg>
+                  <svg width="72" height="72" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#gcal-clip)">
+                      <path d="M61.0525 18.9492H18.9473V61.0545H61.0525V18.9492Z" fill="white" />
+                      <path
+                        d="M61.0524 80.0013L79.9998 61.0539L70.5261 59.4375L61.0524 61.0539L59.3232 69.7194L61.0524 80.0013Z"
+                        fill="#EA4335" />
+                      <path
+                        d="M0 61.0539V73.6855C0 77.1749 2.82632 80.0013 6.31579 80.0013H18.9474L20.8928 70.5276L18.9474 61.0539L8.62475 59.4375L0 61.0539Z"
+                        fill="#188038" />
+                      <path
+                        d="M79.9998 18.9474V6.31579C79.9998 2.82632 77.1734 0 73.684 0H61.0524C59.8996 4.6987 59.3232 8.15659 59.3232 10.3737C59.3232 12.5907 59.8996 15.4486 61.0524 18.9474C65.2429 20.1473 68.4008 20.7473 70.5261 20.7473C72.6514 20.7473 75.8093 20.1473 79.9998 18.9474Z"
+                        fill="#1967D2" />
+                      <path d="M80.0001 18.9492H61.0527V61.0545H80.0001V18.9492Z" fill="#FBBC04" />
+                      <path d="M61.0525 61.0508H18.9473V79.9982H61.0525V61.0508Z" fill="#34A853" />
+                      <path d="M61.0526 0H6.31579C2.82632 0 0 2.82632 0 6.31579V61.0526H18.9474V18.9474H61.0526V0Z"
+                        fill="#4285F4" />
+                      <path
+                        d="M27.5841 51.6097C26.0104 50.5465 24.9209 48.9939 24.3262 46.9413L27.9788 45.436C28.3104 46.6992 28.8893 47.6781 29.7156 48.3729C30.5367 49.0676 31.5367 49.4097 32.7051 49.4097C33.8999 49.4097 34.9262 49.0465 35.7841 48.3202C36.642 47.5939 37.0735 46.6676 37.0735 45.5465C37.0735 44.3992 36.6209 43.4623 35.7156 42.736C34.8104 42.0097 33.6735 41.6465 32.3156 41.6465H30.2051V38.0308H32.0999C33.2683 38.0308 34.2525 37.715 35.0525 37.0834C35.8525 36.4518 36.2525 35.5887 36.2525 34.4887C36.2525 33.5097 35.8946 32.7308 35.1788 32.1465C34.463 31.5623 33.5578 31.2676 32.4578 31.2676C31.3841 31.2676 30.5314 31.5518 29.8999 32.1255C29.2687 32.7007 28.7942 33.427 28.5209 34.236L24.9051 32.7308C25.3841 31.3729 26.263 30.1729 27.5525 29.136C28.842 28.0992 30.4893 27.5781 32.4893 27.5781C33.9683 27.5781 35.2999 27.8623 36.4788 28.436C37.6578 29.0097 38.5841 29.8044 39.2525 30.815C39.9209 31.8308 40.2525 32.9676 40.2525 34.2308C40.2525 35.5202 39.942 36.6097 39.3209 37.5044C38.6999 38.3992 37.9367 39.0834 37.0314 39.5623V39.7781C38.2003 40.26 39.2157 41.0516 39.9683 42.0676C40.7314 43.0939 41.1156 44.3202 41.1156 45.7518C41.1156 47.1834 40.7525 48.4623 40.0262 49.5834C39.2999 50.7044 38.2946 51.5887 37.0209 52.2308C35.742 52.8729 34.3051 53.1992 32.7104 53.1992C30.863 53.2044 29.1578 52.6729 27.5841 51.6097ZM50.0209 33.4834L46.0104 36.3834L44.0051 33.3413L51.1999 28.1518H53.9578V52.6308H50.0209V33.4834Z"
+                        fill="#4285F4" />
+                    </g>
+                    <defs>
+                      <clipPath id="gcal-clip">
+                        <rect width="80" height="80" fill="white" />
+                      </clipPath>
+                    </defs>
+                  </svg>
                 </div>
                 <!-- Outlook — starts right / blurred -->
                 <div class="cal-icon cal-icon--outlook">
-                  <svg width="72" height="72" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" rx="24" fill="#0072C6"/><path d="M46.2227 25.6016V35.3818L49.6405 37.534C49.7306 37.5602 49.9259 37.5621 50.0161 37.534L64.7259 27.6166C64.7259 26.4429 63.6311 25.6016 63.0133 25.6016H46.2227Z" fill="white"/><path d="M46.2226 39.0274L49.3418 41.1702C49.7813 41.4932 50.3108 41.1702 50.3108 41.1702C49.7831 41.4932 64.7277 31.5664 64.7277 31.5664V49.542C64.7277 51.4988 63.4752 52.3195 62.0667 52.3195H46.2207V39.0274H46.2226Z" fill="white"/><path d="M30.0718 34.5195C29.0089 34.5195 28.162 35.0191 27.5366 36.0162C26.9113 37.0134 26.5977 38.3336 26.5977 39.9768C26.5977 41.6444 26.9113 42.9627 27.5366 43.9317C28.162 44.9026 28.9826 45.3853 29.9967 45.3853C31.0427 45.3853 31.8728 44.9139 32.485 43.9712C33.0972 43.0284 33.4052 41.7195 33.4052 40.0463C33.4052 38.3017 33.1085 36.9439 32.5132 35.9731C31.9178 35.004 31.1047 34.5195 30.0718 34.5195Z" fill="white"/><path d="M15.2734 20.6338V58.8967L44.3814 65V15L15.2734 20.6338V20.6338ZM34.7514 46.2338C33.5213 47.8526 31.9176 48.6638 29.9382 48.6638C28.0096 48.6638 26.4396 47.8789 25.2246 46.3108C24.0115 44.7408 23.403 42.6977 23.403 40.1775C23.403 37.5164 24.019 35.3643 25.2528 33.7211C26.4866 32.0779 28.1204 31.2554 30.1542 31.2554C32.0753 31.2554 33.6302 32.0404 34.8152 33.6141C36.0021 35.1878 36.5955 37.261 36.5955 39.8357C36.5974 42.4817 35.9814 44.615 34.7514 46.2338Z" fill="white"/></svg>
+                  <svg width="72" height="72" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="80" height="80" rx="24" fill="#0072C6" />
+                    <path
+                      d="M46.2227 25.6016V35.3818L49.6405 37.534C49.7306 37.5602 49.9259 37.5621 50.0161 37.534L64.7259 27.6166C64.7259 26.4429 63.6311 25.6016 63.0133 25.6016H46.2227Z"
+                      fill="white" />
+                    <path
+                      d="M46.2226 39.0274L49.3418 41.1702C49.7813 41.4932 50.3108 41.1702 50.3108 41.1702C49.7831 41.4932 64.7277 31.5664 64.7277 31.5664V49.542C64.7277 51.4988 63.4752 52.3195 62.0667 52.3195H46.2207V39.0274H46.2226Z"
+                      fill="white" />
+                    <path
+                      d="M30.0718 34.5195C29.0089 34.5195 28.162 35.0191 27.5366 36.0162C26.9113 37.0134 26.5977 38.3336 26.5977 39.9768C26.5977 41.6444 26.9113 42.9627 27.5366 43.9317C28.162 44.9026 28.9826 45.3853 29.9967 45.3853C31.0427 45.3853 31.8728 44.9139 32.485 43.9712C33.0972 43.0284 33.4052 41.7195 33.4052 40.0463C33.4052 38.3017 33.1085 36.9439 32.5132 35.9731C31.9178 35.004 31.1047 34.5195 30.0718 34.5195Z"
+                      fill="white" />
+                    <path
+                      d="M15.2734 20.6338V58.8967L44.3814 65V15L15.2734 20.6338V20.6338ZM34.7514 46.2338C33.5213 47.8526 31.9176 48.6638 29.9382 48.6638C28.0096 48.6638 26.4396 47.8789 25.2246 46.3108C24.0115 44.7408 23.403 42.6977 23.403 40.1775C23.403 37.5164 24.019 35.3643 25.2528 33.7211C26.4866 32.0779 28.1204 31.2554 30.1542 31.2554C32.0753 31.2554 33.6302 32.0404 34.8152 33.6141C36.0021 35.1878 36.5955 37.261 36.5955 39.8357C36.5974 42.4817 35.9814 44.615 34.7514 46.2338Z"
+                      fill="white" />
+                  </svg>
                 </div>
               </div>
             </div>
@@ -2390,7 +2743,15 @@
 
           <div class="step">
             <div class="step-visual" aria-hidden="true">
-              <svg class="step-icon" width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.9289 6.26096C14.8043 4.3856 17.3478 3.33203 20 3.33203H48.3333C49.2174 3.33203 50.0652 3.68322 50.6904 4.30834L69.0237 22.6417C69.6488 23.2668 70 24.1146 70 24.9987V66.6654C70 69.3175 68.9464 71.8611 67.0711 73.7364C65.1957 75.6118 62.6522 76.6654 60 76.6654H20C17.3478 76.6654 14.8043 75.6118 12.9289 73.7364C11.0536 71.8611 10 69.3175 10 66.6654V13.332C10 10.6799 11.0536 8.13633 12.9289 6.26096ZM20 9.9987C19.1159 9.9987 18.2681 10.3499 17.643 10.975C17.0179 11.6001 16.6667 12.448 16.6667 13.332V66.6654C16.6667 67.5494 17.0179 68.3973 17.643 69.0224C18.2681 69.6475 19.1159 69.9987 20 69.9987H60C60.8841 69.9987 61.7319 69.6475 62.357 69.0224C62.9821 68.3973 63.3333 67.5494 63.3333 66.6654V26.3794L46.9526 9.9987H20Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M46.6663 3.33203C48.5073 3.33203 49.9997 4.82442 49.9997 6.66536V23.332H66.6663C68.5073 23.332 69.9997 24.8244 69.9997 26.6654C69.9997 28.5063 68.5073 29.9987 66.6663 29.9987H46.6663C44.8254 29.9987 43.333 28.5063 43.333 26.6654V6.66536C43.333 4.82442 44.8254 3.33203 46.6663 3.33203Z" fill="white"/></svg>
+              <svg class="step-icon" width="80" height="80" viewBox="0 0 80 80" fill="none"
+                xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M12.9289 6.26096C14.8043 4.3856 17.3478 3.33203 20 3.33203H48.3333C49.2174 3.33203 50.0652 3.68322 50.6904 4.30834L69.0237 22.6417C69.6488 23.2668 70 24.1146 70 24.9987V66.6654C70 69.3175 68.9464 71.8611 67.0711 73.7364C65.1957 75.6118 62.6522 76.6654 60 76.6654H20C17.3478 76.6654 14.8043 75.6118 12.9289 73.7364C11.0536 71.8611 10 69.3175 10 66.6654V13.332C10 10.6799 11.0536 8.13633 12.9289 6.26096ZM20 9.9987C19.1159 9.9987 18.2681 10.3499 17.643 10.975C17.0179 11.6001 16.6667 12.448 16.6667 13.332V66.6654C16.6667 67.5494 17.0179 68.3973 17.643 69.0224C18.2681 69.6475 19.1159 69.9987 20 69.9987H60C60.8841 69.9987 61.7319 69.6475 62.357 69.0224C62.9821 68.3973 63.3333 67.5494 63.3333 66.6654V26.3794L46.9526 9.9987H20Z"
+                  fill="#18181b" />
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M46.6663 3.33203C48.5073 3.33203 49.9997 4.82442 49.9997 6.66536V23.332H66.6663C68.5073 23.332 69.9997 24.8244 69.9997 26.6654C69.9997 28.5063 68.5073 29.9987 66.6663 29.9987H46.6663C44.8254 29.9987 43.333 28.5063 43.333 26.6654V6.66536C43.333 4.82442 44.8254 3.33203 46.6663 3.33203Z"
+                  fill="#18181b" />
+              </svg>
             </div>
             <div class="step-body">
               <p class="step-title-text">Upload your documents.</p>
@@ -2436,7 +2797,7 @@
     <section id="pricing" class="pricing-section" aria-labelledby="pricing-title">
       <div class="container">
 
-        <div class="section-header-centered" style="margin-bottom:3rem;">
+        <div class="section-header-centered">
           <h2 class="section-title" id="pricing-title">Simple pricing</h2>
           <p class="section-sub" style="margin-top:.75rem;">Start for free. Upgrade when you're ready.</p>
         </div>
@@ -2656,6 +3017,28 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
   <script>
+
+    function typewriterEffect(element, text, duration = 3000) {
+      const words = text.split(" ");
+      const totalWords = words.length;
+      const interval = duration / totalWords;
+
+      element.textContent = "";
+
+      let currentWord = 0;
+
+      const timer = setInterval(() => {
+        if (currentWord < totalWords) {
+          element.textContent +=
+            (currentWord === 0 ? "" : " ") + words[currentWord];
+
+          currentWord++;
+        } else {
+          clearInterval(timer);
+        }
+      }, interval);
+    }
+
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', e => {
         const id = a.getAttribute('href');
@@ -2700,7 +3083,7 @@
     (function () {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-      var baseHeights = [24.24, 10.773, 8.08, 10.773, 24.24, 13.467, 5.387, 10.773, 9.427];
+      var baseHeights = [63.966, 28.429, 21.322, 28.429, 63.966, 35.537, 14.215, 28.429, 24.876];
       var bars = gsap.utils.toArray('.sb-bar');
       var random = function (min, max) { return Math.random() * (max - min) + min; };
 
@@ -2717,51 +3100,128 @@
       });
     })();
 
-    // Mockup animation timeline — single slot, strict replacement
+    // Mockup animation — progressive status transitions → AI response, looping
     (function () {
-      function switchToState(fromId, toId, onVisible) {
-        var from = fromId ? document.getElementById(fromId) : null;
-        var to   = document.getElementById(toId);
-        if (!to) return;
+      var LABELS = ['Listening', 'Understanding context', 'Generating response'];
+      var STEP_MS = 8000 / LABELS.length; // ~2667ms per label
+      var timers = [];
 
-        if (from) {
-          from.style.opacity = '0';
-          setTimeout(function () {
-            from.style.display = 'none';
-            to.style.opacity = '0';
-            to.style.display = 'block';
+      function kill() {
+        timers.forEach(clearTimeout);
+        timers = [];
+      }
+
+      // Cross-fade the status text — opacity out, swap, opacity in
+      function setLabel(text) {
+        var el = document.getElementById('status-text');
+        if (!el) return;
+        el.style.transition = 'opacity 0.25s ease';
+        el.style.opacity = '0';
+        timers.push(setTimeout(function () {
+          el.textContent = text;
+          el.style.opacity = '1';
+        }, 250));
+      }
+
+      function reset() {
+        kill();
+        // Clear typewriter content so it re-runs cleanly next cycle
+        var content = document.getElementById('ai-response-content');
+        if (content) content.innerHTML = '';
+        // Reset status label to first label
+        var statusEl = document.getElementById('status-text');
+        if (statusEl) {
+          statusEl.style.transition = 'none';
+          statusEl.style.opacity = '1';
+          statusEl.textContent = LABELS[0];
+        }
+        // Show listening state, hide AI response
+        var ls = document.getElementById('state-listening');
+        var ai = document.getElementById('state-ai');
+        if (ai)  { ai.style.display = 'none'; ai.style.opacity = '0'; }
+        if (ls)  { ls.style.display = 'block'; ls.style.opacity = '1'; }
+      }
+
+      function run() {
+        reset();
+
+        // Advance through labels 1 and 2 at even intervals
+        LABELS.slice(1).forEach(function (label, i) {
+          timers.push(setTimeout(function () {
+            setLabel(label);
+          }, STEP_MS * (i + 1)));
+        });
+
+        // At 8s: cross-fade into AI response, then run typewriter
+        timers.push(setTimeout(function () {
+          var ls = document.getElementById('state-listening');
+          var ai = document.getElementById('state-ai');
+          if (!ls || !ai) return;
+          ls.style.opacity = '0';
+          timers.push(setTimeout(function () {
+            ls.style.display = 'none';
+            ai.style.opacity = '0';
+            ai.style.display = 'block';
             requestAnimationFrame(function () {
-              to.style.opacity = '1';
-              if (onVisible) onVisible(to);
+              ai.style.opacity = '1';
+              var content = document.getElementById('ai-response-content');
+              if (content) streamText(content, aiSummaryText, 100);
             });
-          }, 250);
-        } else {
-          to.style.opacity = '1';
-          if (onVisible) onVisible(to);
+          }, 250));
+        }, 8000));
+
+        // Loop: restart after 15s (8s status + 7s to read AI response)
+        timers.push(setTimeout(run, 15000));
+      }
+
+      run();
+    })();
+
+    // AI response content — typewritten into #ai-response-content on each cycle
+    var aiSummaryText = '<p class="ai-response-text">No clear owner has been assigned for the infrastructure migration initiative. Without explicit accountability, this critical path item is at high risk of slipping past the Q3 deadline — potentially blocking dependent workstreams including the platform launch and data pipeline cutover.</p><p class="ai-say-title">You can say this:</p><p class="ai-say-body">Before we close out this agenda item, it is worth pausing to address the ownership gap directly. Unassigned initiatives at this stage rarely resolve themselves, and the infrastructure migration sits on the critical path for at least three downstream workstreams.</p><ol class="ai-say-list"><li>Identify a willing owner from the team present — ideally someone with infrastructure context who has capacity before end of Q3. If no one volunteers, escalate to the engineering lead before end of day.</li><li>Define a lightweight accountability structure: a weekly check-in, a single status document, and a clear definition of done for the migration milestone so progress is visible to stakeholders.</li><li>Set a decision checkpoint — if the migration is not on track by end of week two of Q3, trigger an immediate escalation to the steering committee with options to scope down or extend the timeline.</li></ol>';
+
+    function streamText(element, html, duration) {
+      element.innerHTML = '';
+      var tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      var nodes = Array.from(tempDiv.childNodes);
+      var totalChars = tempDiv.textContent.length;
+      var delay = Math.max(4, duration / totalChars);
+      var currentNodeIndex = 0;
+
+      function streamNode(node, parent, callback) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          var span = document.createTextNode('');
+          parent.appendChild(span);
+          var text = node.textContent;
+          var i = 0;
+          var interval = setInterval(function () {
+            span.textContent += text[i];
+            i++;
+            if (i >= text.length) { clearInterval(interval); callback(); }
+          }, delay);
+          return;
+        }
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          var clone = node.cloneNode(false);
+          parent.appendChild(clone);
+          var children = Array.from(node.childNodes);
+          var childIndex = 0;
+          function nextChild() {
+            if (childIndex >= children.length) { callback(); return; }
+            streamNode(children[childIndex], clone, function () { childIndex++; nextChild(); });
+          }
+          nextChild();
         }
       }
 
-      function streamElements(container) {
-        var els = Array.prototype.slice.call(container.querySelectorAll('[data-stream]'));
-        els.forEach(function (el, i) {
-          setTimeout(function () { el.style.opacity = '1'; }, i * 400);
-        });
+      function nextNode() {
+        if (currentNodeIndex >= nodes.length) return;
+        streamNode(nodes[currentNodeIndex], element, function () { currentNodeIndex++; nextNode(); });
       }
+      nextNode();
+    }
 
-      // t=0: state-talking already display:block in HTML
-
-      // t=6s: replace talking → reasoning
-      setTimeout(function () {
-        switchToState('state-talking', 'state-reasoning');
-      }, 6000);
-
-      // t=7s: replace reasoning → AI response, stream elements top→bottom
-      setTimeout(function () {
-        switchToState('state-reasoning', 'state-ai', function (el) {
-          streamElements(el);
-        });
-      }, 7000);
-    })();
 
   </script>
 
